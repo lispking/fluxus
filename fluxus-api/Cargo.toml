@@ -1,0 +1,18 @@
+[package]
+name = "fluxus-api"
+version = "0.1.0"
+edition = "2021"
+authors = ["Fluxus Team"]
+description = "High-level API for Fluxus stream processing engine"
+license = "Apache-2.0"
+
+[dependencies]
+fluxus-core = { path = "../fluxus-core" }
+fluxus-runtime = { path = "../fluxus-runtime" }
+tokio = { version = "1.36", features = ["full"] }
+futures = "0.3"
+async-trait = "0.1"
+anyhow = "1.0"
+tracing = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

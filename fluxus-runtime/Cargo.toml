@@ -1,0 +1,18 @@
+[package]
+name = "fluxus-runtime"
+version = "0.1.0"
+edition = "2021"
+authors = ["Fluxus Team"]
+description = "Runtime implementation for Fluxus stream processing engine"
+license = "Apache-2.0"
+
+[dependencies]
+fluxus-core = { path = "../fluxus-core" }
+tokio = { version = "1.36", features = ["full"] }
+futures = "0.3"
+async-trait = "0.1"
+tracing = "0.1"
+parking_lot = "0.12"
+dashmap = "5.5"
+bytes = "1.5"
+uuid = { version = "1.7", features = ["v4"] }
