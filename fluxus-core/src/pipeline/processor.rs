@@ -1,7 +1,9 @@
 use super::DummySink;
 use super::status::PipelineStatus;
+use crate::BackpressureStrategy;
 use crate::Counter;
 use crate::ParallelConfig;
+use crate::RetryStrategy;
 use crate::Timer;
 use crate::error_handling::BackpressureController;
 use crate::error_handling::ErrorHandler;
@@ -14,6 +16,7 @@ use crate::source::Source;
 use crate::window::WindowConfig;
 use std::sync::Arc;
 use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use tokio::runtime::Handle;
 use tokio::time;
 use tracing;
 
@@ -57,26 +60,24 @@ impl<T: 'static + Send + Clone> Pipeline<T> {
             operators: Vec::new(),
             sink: Box::new(DummySink::new()),
             window_config: None,
-            parallel_config: crate::config::ParallelConfig::default(),
+            parallel_config: ParallelConfig::default(),
             status: PipelineStatus::Ready,
             last_watermark: 0,
             metrics: Arc::new(metrics),
             process_timer,
             records_processed,
             records_failed,
-            error_handler: ErrorHandler::new(crate::error_handling::RetryStrategy::exponential(
+            error_handler: ErrorHandler::new(RetryStrategy::exponential(
                 Duration::from_millis(100),
                 Duration::from_secs(10),
                 3,
                 2.0,
             )),
-            backpressure: BackpressureController::new(
-                crate::error_handling::BackpressureStrategy::Throttle {
-                    high_watermark: 1000,
-                    low_watermark: 100,
-                    backoff: Duration::from_millis(50),
-                },
-            ),
+            backpressure: BackpressureController::new(BackpressureStrategy::Throttle {
+                high_watermark: 1000,
+                low_watermark: 100,
+                backoff: Duration::from_millis(50),
+            }),
         }
     }
 
@@ -99,22 +100,19 @@ impl<T: 'static + Send + Clone> Pipeline<T> {
     }
 
     /// Configure parallel processing for the pipeline
-    pub fn parallel(mut self, config: crate::config::ParallelConfig) -> Self {
+    pub fn parallel(mut self, config: ParallelConfig) -> Self {
         self.parallel_config = config;
         self
     }
 
     /// Configure error handling strategy
-    pub fn with_retry_strategy(mut self, strategy: crate::error_handling::RetryStrategy) -> Self {
+    pub fn with_retry_strategy(mut self, strategy: RetryStrategy) -> Self {
         self.error_handler = ErrorHandler::new(strategy);
         self
     }
 
     /// Configure backpressure strategy
-    pub fn with_backpressure_strategy(
-        mut self,
-        strategy: crate::error_handling::BackpressureStrategy,
-    ) -> Self {
+    pub fn with_backpressure_strategy(mut self, strategy: BackpressureStrategy) -> Self {
         self.backpressure = BackpressureController::new(strategy);
         self
     }
@@ -164,7 +162,7 @@ impl<T: 'static + Send + Clone> Pipeline<T> {
 
         error_handler
             .retry(|| {
-                let rt = tokio::runtime::Handle::current();
+                let rt = Handle::current();
                 rt.block_on(op_ref.process(record.clone()))
             })
             .await
@@ -181,7 +179,7 @@ impl<T: 'static + Send + Clone> Pipeline<T> {
 
         error_handler
             .retry(|| {
-                let rt = tokio::runtime::Handle::current();
+                let rt = Handle::current();
                 rt.block_on(sink_ref.write(record.clone()))
             })
             .await

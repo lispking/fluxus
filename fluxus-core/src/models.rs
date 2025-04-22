@@ -19,6 +19,22 @@ impl<T: Clone> Clone for Record<T> {
     }
 }
 
+impl<T> Record<T> {
+    /// Create a new record with the current timestamp
+    pub fn new(data: T) -> Self {
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_millis() as i64;
+        Record { data, timestamp }
+    }
+
+    /// Create a new record with a specific timestamp
+    pub fn with_timestamp(data: T, timestamp: i64) -> Self {
+        Record { data, timestamp }
+    }
+}
+
 /// Error types that can occur during stream processing
 #[derive(Error, Debug)]
 pub enum StreamError {
@@ -37,19 +53,3 @@ pub enum StreamError {
 
 /// A Result type specialized for stream processing operations
 pub type StreamResult<T> = Result<T, StreamError>;
-
-impl<T> Record<T> {
-    /// Create a new record with the current timestamp
-    pub fn new(data: T) -> Self {
-        let timestamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .unwrap()
-            .as_millis() as i64;
-        Record { data, timestamp }
-    }
-
-    /// Create a new record with a specific timestamp
-    pub fn with_timestamp(data: T, timestamp: i64) -> Self {
-        Record { data, timestamp }
-    }
-}

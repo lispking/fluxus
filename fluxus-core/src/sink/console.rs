@@ -46,7 +46,7 @@ where
     }
 
     async fn write(&mut self, record: Record<T>) -> StreamResult<()> {
-        println!("{}", self.formatter.format(&record));
+        tracing::info!("{}", self.formatter.format(&record));
         Ok(())
     }
 

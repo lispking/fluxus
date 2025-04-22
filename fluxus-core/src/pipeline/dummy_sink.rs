@@ -4,14 +4,9 @@ use crate::sink::Sink;
 use std::marker::PhantomData;
 
 /// A dummy sink that discards all records
+#[derive(Default)]
 pub struct DummySink<T> {
     _phantom: PhantomData<T>,
-}
-
-impl<T> Default for DummySink<T> {
-    fn default() -> Self {
-        Self::new()
-    }
 }
 
 impl<T> DummySink<T> {
