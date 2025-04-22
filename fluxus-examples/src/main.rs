@@ -1,10 +1,10 @@
-use clap::{Parser, ValueEnum};
 use anyhow::Result;
+use clap::{Parser, ValueEnum};
 
-mod word_count;
-mod temperature_sensor;
 mod click_stream;
 mod network_log;
+mod temperature_sensor;
+mod word_count;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
