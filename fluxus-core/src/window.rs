@@ -9,6 +9,10 @@ pub enum WindowType {
     Sliding(Duration, Duration),
     /// Session window with gap timeout
     Session(Duration),
+    /// Hopping window with size and hop interval
+    Hopping(Duration, Duration),
+    /// Global window, no window boundaries
+    Global,
 }
 
 /// Configuration for windowed operations
@@ -45,6 +49,24 @@ impl WindowConfig {
     pub fn session(gap: Duration) -> Self {
         Self {
             window_type: WindowType::Session(gap),
+            allow_lateness: Duration::from_secs(0),
+            watermark_delay: Duration::from_secs(0),
+        }
+    }
+
+    /// Create a new hopping window configuration
+    pub fn hopping(size: Duration, hop: Duration) -> Self {
+        Self {
+            window_type: WindowType::Hopping(size, hop),
+            allow_lateness: Duration::from_secs(0),
+            watermark_delay: Duration::from_secs(0),
+        }
+    }
+
+    /// Create a new global window configuration
+    pub fn global() -> Self {
+        Self {
+            window_type: WindowType::Global,
             allow_lateness: Duration::from_secs(0),
             watermark_delay: Duration::from_secs(0),
         }

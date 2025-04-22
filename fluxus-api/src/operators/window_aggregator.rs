@@ -45,6 +45,21 @@ where
                     .collect()
             }
             WindowType::Session(_) => vec![timestamp as u64],
+            WindowType::Hopping(size, hop) => {
+                let size_ms = size.as_millis() as i64;
+                let hop_ms = hop.as_millis() as i64;
+                let earliest_window = ((timestamp - size_ms) / hop_ms) * hop_ms;
+                let latest_window = (timestamp / hop_ms) * hop_ms;
+
+                (earliest_window..=latest_window)
+                    .step_by(hop.as_millis() as usize)
+                    .filter(|&start| timestamp - start < size_ms)
+                    .map(|ts| ts as u64)
+                    .collect()
+            }
+            WindowType::Global => {
+                vec![0] // Global window can use a single key, here we use 0
+            }
         }
     }
 }

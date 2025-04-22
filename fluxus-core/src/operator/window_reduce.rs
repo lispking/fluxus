@@ -51,6 +51,20 @@ where
                 let gap_ms = gap.as_millis() as i64;
                 vec![timestamp / gap_ms]
             }
+            WindowType::Hopping(size, hop) => {
+                let hop_ms = hop.as_millis() as i64;
+                let size_ms = size.as_millis() as i64;
+                let earliest_window = ((timestamp - size_ms) / hop_ms) * hop_ms;
+                let latest_window = (timestamp / hop_ms) * hop_ms;
+
+                (earliest_window..=latest_window)
+                    .step_by(hop.as_millis() as usize)
+                    .filter(|&start| timestamp - start < size_ms)
+                    .collect()
+            }
+            WindowType::Global => {
+                vec![0] // Global window can be represented by a single key, here we use 0
+            }
         }
     }
 
@@ -127,6 +141,14 @@ where
                 crate::window::WindowType::Session(gap) => {
                     key + gap.as_millis() as i64 + self.window.allow_lateness.as_millis() as i64
                         <= now
+                }
+                crate::window::WindowType::Hopping(size, _) => {
+                    key + size.as_millis() as i64 + self.window.allow_lateness.as_millis() as i64
+                        <= now
+                }
+                crate::window::WindowType::Global => {
+                    // Global window doesn't expire based on time, so it's never considered expired here
+                    false
                 }
             })
             .cloned()
