@@ -63,7 +63,7 @@ The type - safe API and well - structured project make it easy for developers to
 A simple word frequency analysis in text streams using tumbling windows.
 
 ```bash
-cargo run --bin word-count
+cargo run --example word-count
 ```
 
 ### 5.2 Temperature Sensor Analysis
@@ -71,7 +71,7 @@ cargo run --bin word-count
 Processing and analyzing temperature sensor data with sliding windows.
 
 ```bash
-cargo run --bin temperature-sensor
+cargo run --example temperature-sensor
 ```
 
 ### 5.3 Click Stream Analysis
@@ -79,7 +79,7 @@ cargo run --bin temperature-sensor
 Analyzing user click streams with session windows.
 
 ```bash
-cargo run --bin click-stream
+cargo run --example click-stream
 ```
 
 ### 5.4 Network Log Analysis
@@ -87,7 +87,7 @@ cargo run --bin click-stream
 Processing network logs with sliding windows and aggregations.
 
 ```bash
-cargo run --bin network-log
+cargo run --example network-log
 ```
 
 ### 5.5 IoT Device Analysis
@@ -95,7 +95,7 @@ cargo run --bin network-log
 Processing IoT device data with tumbling windows and aggregations.
 
 ```bash
-cargo run --bin iot-devices
+cargo run --example iot-devices
 ```
 
 ### 5.6 Log Anomaly Detection
@@ -103,7 +103,7 @@ cargo run --bin iot-devices
 Detecting anomalies in log streams using sliding windows and aggregations.
 
 ```bash
-cargo run --bin log-anomaly
+cargo run --example log-anomaly
 ```
 
 ### 5.7 Stock Analysis
@@ -111,7 +111,7 @@ cargo run --bin log-anomaly
 Analyzing stock price data with tumbling windows and aggregations.
 
 ```bash
-cargo run --bin stock-market
+cargo run --example stock-market
 ```
 
 

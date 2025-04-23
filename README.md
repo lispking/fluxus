@@ -31,7 +31,7 @@ The project includes several example applications that demonstrate different use
 Simple word frequency analysis in text streams using tumbling windows.
 
 ```bash
-cargo run --bin word-count
+cargo run --example word-count
 ```
 
 ### Temperature Sensor Analysis
@@ -39,7 +39,7 @@ cargo run --bin word-count
 Processing and analyzing temperature sensor data with sliding windows.
 
 ```bash
-cargo run --bin temperature-sensor
+cargo run --example temperature-sensor
 ```
 
 ### Click Stream Analysis
@@ -47,7 +47,7 @@ cargo run --bin temperature-sensor
 Analyzing user click streams with session windows.
 
 ```bash
-cargo run --bin click-stream
+cargo run --example click-stream
 ```
 
 ### Network Log Analysis
@@ -55,7 +55,7 @@ cargo run --bin click-stream
 Processing network logs with sliding windows and aggregations.
 
 ```bash
-cargo run --bin network-log
+cargo run --example network-log
 ```
 
 ### View Available Examples
@@ -63,7 +63,7 @@ cargo run --bin network-log
 To see all available examples and options:
 
 ```bash
-cargo run --bin
+cargo run --example
 ```
 
 ## Getting Started
@@ -84,7 +84,7 @@ cargo build
 3. Run the examples:
 
 ```bash
-cargo run --bin [example-name]
+cargo run --example [example-name]
 ```
 
 ## Development

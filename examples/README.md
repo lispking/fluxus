@@ -12,7 +12,7 @@ Demonstrates basic stream processing with tumbling windows:
 - Shows parallel processing capabilities
 
 ```bash
-cargo run --bin word-count
+cargo run --example word-count
 ```
 
 ### 2. Temperature Sensor Analysis (`temperature-sensor`)
@@ -23,7 +23,7 @@ Shows how to process IoT sensor data:
 - Uses sliding windows for continuous monitoring
 
 ```bash
-cargo run --bin temperature-sensor
+cargo run --example temperature-sensor
 ```
 
 ### 3. Click Stream Analysis (`click-stream`)
@@ -34,7 +34,7 @@ Demonstrates session window usage for user behavior analysis:
 - Analyzes user engagement metrics
 
 ```bash
-cargo run --bin click-stream
+cargo run --example click-stream
 ```
 
 ### 4. Network Log Analysis (`network-log`)
@@ -45,7 +45,7 @@ Shows advanced stream processing features:
 - Uses sliding windows with custom aggregations
 
 ```bash
-cargo run --bin network-log
+cargo run --example network-log
 ```
 
 ### 5. IoT Device Analysis (`iot-devices`)
@@ -56,7 +56,7 @@ Demonstrates how to process various IoT device data:
 - Uses tumbling windows for real-time monitoring
 
 ```bash
-cargo run --bin iot-devices
+cargo run --example iot-devices
 ```
 
 ### 6. Log Anomaly Detection (`log-anomaly`)
@@ -67,7 +67,7 @@ Demonstrates log anomaly detection capabilities:
 - Uses custom windows for anomaly analysis
 
 ```bash
-cargo run --bin log-anomaly
+cargo run --example log-anomaly
 ```
 
 ### 7. Stock Market Analysis (`stock-market`)
@@ -78,7 +78,7 @@ Demonstrates stock market data processing:
 - Uses session windows to analyze trading patterns
 
 ```bash
-cargo run --bin stock-market
+cargo run --example stock-market
 ```
 
 ## Example Structure
