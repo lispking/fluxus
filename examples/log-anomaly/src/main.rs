@@ -29,7 +29,8 @@ pub struct AnomalyStats {
     total_events: u32,
 }
 
-pub async fn run() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     // Generate sample log events
     let events = generate_sample_events();
     let source = CollectionSource::new(events);

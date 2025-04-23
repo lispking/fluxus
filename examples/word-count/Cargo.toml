@@ -1,17 +1,18 @@
 [package]
-name = "fluxus-examples"
-description = "Examples for Fluxus stream processing engine"
+name = "word-count"
+description = "Word count example for Fluxus stream processing engine"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 authors.workspace = true
 repository.workspace = true
-readme.workspace = true
+readme = "./README.md"
 
 [dependencies]
-fluxus-core = { path = "../fluxus-core" }
-fluxus-runtime = { path = "../fluxus-runtime" }
-fluxus-api = { path = "../fluxus-api" }
+fluxus-core = { path = "../../crates/fluxus-core" }
+fluxus-runtime = { path = "../../crates/fluxus-runtime" }
+fluxus-api = { path = "../../crates/fluxus-api" }
+
 tokio = { version = "1.36", features = ["full"] }
 anyhow = "1.0"
 clap = { version = "4.0", features = ["derive"] }

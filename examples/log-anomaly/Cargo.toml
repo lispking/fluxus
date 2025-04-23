@@ -1,0 +1,20 @@
+[package]
+name = "log-anomaly"
+description = "Log anomaly detection example for Fluxus stream processing engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme = "./README.md"
+
+[dependencies]
+fluxus-core = { path = "../../crates/fluxus-core" }
+fluxus-runtime = { path = "../../crates/fluxus-runtime" }
+fluxus-api = { path = "../../crates/fluxus-api" }
+
+tokio = { version = "1.36", features = ["full"] }
+anyhow = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+tracing-subscriber = "0.3.19"
+tracing = "0.1.41"

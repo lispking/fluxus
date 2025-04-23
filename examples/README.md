@@ -4,52 +4,81 @@ A collection of example applications demonstrating the usage of the Fluxus strea
 
 ## Available Examples
 
-### 1. Word Count (`word_count.rs`)
+### 1. Word Count (`word-count`)
+
 Demonstrates basic stream processing with tumbling windows:
 - Splits text into words
 - Counts word frequencies in time windows
 - Shows parallel processing capabilities
+
 ```bash
-cargo run -- word-count
+cargo run --bin word-count
 ```
 
-### 2. Temperature Sensor Analysis (`temperature_sensor.rs`)
+### 2. Temperature Sensor Analysis (`temperature-sensor`)
+
 Shows how to process IoT sensor data:
 - Processes multiple sensor readings
 - Calculates min/max/average temperatures
 - Uses sliding windows for continuous monitoring
+
 ```bash
-cargo run -- temperature
+cargo run --bin temperature-sensor
 ```
 
-### 3. Click Stream Analysis (`click_stream.rs`)
+### 3. Click Stream Analysis (`click-stream`)
+
 Demonstrates session window usage for user behavior analysis:
 - Tracks user navigation patterns
 - Groups events into sessions
 - Analyzes user engagement metrics
+
 ```bash
-cargo run -- click-stream
+cargo run --bin click-stream
 ```
 
-### 4. Network Log Analysis (`network_log.rs`)
+### 4. Network Log Analysis (`network-log`)
+
 Shows advanced stream processing features:
 - Processes HTTP access logs
 - Calculates request statistics
 - Uses sliding windows with custom aggregations
+
 ```bash
-cargo run -- network-log
+cargo run --bin network-log
 ```
 
-## Running the Examples
+### 5. IoT Device Analysis (`iot-devices`)
 
-### View Available Options
+Demonstrates how to process various IoT device data:
+- Processes sensor data from different devices
+- Calculates device status statistics
+- Uses tumbling windows for real-time monitoring
+
 ```bash
-cargo run -- --help
+cargo run --bin iot-devices
 ```
 
-### Running a Specific Example
+### 6. Log Anomaly Detection (`log-anomaly`)
+
+Demonstrates log anomaly detection capabilities:
+- Processes system log data
+- Detects abnormal log patterns
+- Uses custom windows for anomaly analysis
+
 ```bash
-cargo run -- <example-name>
+cargo run --bin log-anomaly
+```
+
+### 7. Stock Market Analysis (`stock-market`)
+
+Demonstrates stock market data processing:
+- Processes real-time stock price data
+- Calculates stock price indicators
+- Uses session windows to analyze trading patterns
+
+```bash
+cargo run --bin stock-market
 ```
 
 ## Example Structure
@@ -69,10 +98,6 @@ We recommend going through the examples in this order:
 2. Temperature Sensor - Time-based windows
 3. Click Stream - Session windows
 4. Network Log - Advanced features
-
-## Testing
-
-Each example includes unit tests demonstrating the expected behavior:
-```bash
-cargo test
-```
+5. IoT Devices - Multiple data sources
+6. Log Anomaly - Custom windows
+7. Stock Market - Real-time monitoring

@@ -1,10 +1,5 @@
 [workspace]
-members = [
-    "fluxus-core",
-    "fluxus-runtime",
-    "fluxus-api",
-    "fluxus-examples"
-]
+members = ["crates/*", "examples/*"]
 
 resolver = "2"
 
@@ -18,4 +13,10 @@ homepage = "https://github.com/lispking/fluxus"
 repository = "https://github.com/lispking/fluxus"
 readme = "README.md"
 categories = ["database", "development-tools", "asynchronous", "science"]
-keywords = ["stream-processing", "real-time", "data-processing", "analytics", "async"]
+keywords = [
+    "stream-processing",
+    "real-time",
+    "data-processing",
+    "analytics",
+    "async",
+]

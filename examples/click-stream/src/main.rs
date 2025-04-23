@@ -24,7 +24,8 @@ pub struct UserSession {
     total_events: usize,
 }
 
-pub async fn run() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     // Generate sample click events
     let events = generate_sample_clicks();
     let source = CollectionSource::new(events);

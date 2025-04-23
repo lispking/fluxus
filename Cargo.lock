@@ -170,6 +170,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
 
 [[package]]
+name = "click-stream"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "fluxus-api",
+ "fluxus-core",
+ "fluxus-runtime",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "colorchoice"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -239,20 +253,6 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
-]
-
-[[package]]
-name = "fluxus-examples"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "fluxus-api",
- "fluxus-core",
- "fluxus-runtime",
- "tokio",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -396,6 +396,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d231dfb89cfffdbc30e7fc41579ed6066ad03abda9e567ccafae602b97ec5024"
 
 [[package]]
+name = "iot-devices"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "fluxus-api",
+ "fluxus-core",
+ "fluxus-runtime",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "is_terminal_polyfill"
 version = "1.70.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -436,6 +450,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13dc2df351e3202783a1fe0d44375f7295ffb4049267b0f3018346dc122a1d94"
 
 [[package]]
+name = "log-anomaly"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "fluxus-api",
+ "fluxus-core",
+ "fluxus-runtime",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "memchr"
 version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -459,6 +487,20 @@ dependencies = [
  "libc",
  "wasi 0.11.0+wasi-snapshot-preview1",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "network-log"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "fluxus-api",
+ "fluxus-core",
+ "fluxus-runtime",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -664,6 +706,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "stock-market"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "fluxus-api",
+ "fluxus-core",
+ "fluxus-runtime",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "strsim"
 version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -678,6 +734,20 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "temperature-sensor"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "fluxus-api",
+ "fluxus-core",
+ "fluxus-runtime",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -949,4 +1019,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6f42320e61fe2cfd34354ecb597f86f413484a798ba44a8ca1165c58d42da6c1"
 dependencies = [
  "bitflags",
+]
+
+[[package]]
+name = "word-count"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "fluxus-api",
+ "fluxus-core",
+ "fluxus-runtime",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]

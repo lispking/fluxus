@@ -9,7 +9,8 @@ use std::time::Duration;
 
 pub type WordCount = HashMap<String, usize>;
 
-pub async fn run() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     // Sample input text
     let text = vec![
         "hello world",

@@ -29,7 +29,8 @@ pub struct StockStats {
     low: f64,
 }
 
-pub async fn run() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     // Generate sample stock trading data
     let trades = generate_sample_trades();
     let source = CollectionSource::new(trades);

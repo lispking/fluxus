@@ -25,7 +25,8 @@ pub struct SensorStats {
     reading_count: usize,
 }
 
-pub async fn run() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     // Generate sample temperature readings
     let readings = generate_sample_readings();
     let source = CollectionSource::new(readings);

@@ -28,7 +28,8 @@ pub struct DeviceStats {
     last_update: SystemTime,
 }
 
-pub async fn run() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     // Generate sample IoT device data
     let iot_data = generate_sample_data();
     let source = CollectionSource::new(iot_data);

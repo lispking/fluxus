@@ -27,7 +27,8 @@ pub struct PathStats {
     avg_response_size: f64,
 }
 
-pub async fn run() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     // Generate sample log entries
     let logs = generate_sample_logs();
     let source = CollectionSource::new(logs);
