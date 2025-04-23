@@ -177,7 +177,7 @@ dependencies = [
  "clap",
  "fluxus-api",
  "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluxus-runtime",
+ "fluxus-runtime 0.1.0",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -230,7 +230,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluxus-runtime",
+ "fluxus-runtime 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures",
  "serde",
  "serde_json",
@@ -276,6 +276,23 @@ dependencies = [
 [[package]]
 name = "fluxus-runtime"
 version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "dashmap",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "futures",
+ "parking_lot",
+ "tokio",
+ "tracing",
+ "uuid",
+]
+
+[[package]]
+name = "fluxus-runtime"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "09b11e1c7dd3bd2c74c8a6769e070c0855f7c8e8d83212cd9287237a41b249b1"
 dependencies = [
  "async-trait",
  "bytes",
@@ -421,7 +438,7 @@ dependencies = [
  "clap",
  "fluxus-api",
  "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluxus-runtime",
+ "fluxus-runtime 0.1.0",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -475,7 +492,7 @@ dependencies = [
  "clap",
  "fluxus-api",
  "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluxus-runtime",
+ "fluxus-runtime 0.1.0",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -515,7 +532,7 @@ dependencies = [
  "clap",
  "fluxus-api",
  "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluxus-runtime",
+ "fluxus-runtime 0.1.0",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -731,7 +748,7 @@ dependencies = [
  "clap",
  "fluxus-api",
  "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluxus-runtime",
+ "fluxus-runtime 0.1.0",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -762,7 +779,7 @@ dependencies = [
  "clap",
  "fluxus-api",
  "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluxus-runtime",
+ "fluxus-runtime 0.1.0",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -1047,7 +1064,7 @@ dependencies = [
  "clap",
  "fluxus-api",
  "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "fluxus-runtime",
+ "fluxus-runtime 0.1.0",
  "tokio",
  "tracing",
  "tracing-subscriber",
