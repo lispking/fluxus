@@ -4,15 +4,10 @@ use async_trait::async_trait;
 use std::marker::PhantomData;
 
 /// A sink that writes to console
+#[derive(Default)]
 pub struct ConsoleSink<T, F = DefaultFormatter> {
     formatter: F,
     _phantom: PhantomData<T>,
-}
-
-impl<T> Default for ConsoleSink<T, DefaultFormatter> {
-    fn default() -> Self {
-        Self::new()
-    }
 }
 
 impl<T> ConsoleSink<T, DefaultFormatter> {
