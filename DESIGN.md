@@ -59,13 +59,17 @@ The type - safe API and well - structured project make it easy for developers to
 ## 5. Example Applications
 
 ### 5.1 Word Count
+
 A simple word frequency analysis in text streams using tumbling windows.
+
 ```bash
 cargo run --bin word-count
 ```
 
 ### 5.2 Temperature Sensor Analysis
+
 Processing and analyzing temperature sensor data with sliding windows.
+
 ```bash
 cargo run --bin temperature-sensor
 ```

@@ -48,7 +48,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fluxus-runtime = "0.1.0"
+fluxus-runtime = "0.1"
 ```
 
 This crate is usually not used directly but through the `fluxus-api` crate.

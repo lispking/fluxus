@@ -8,7 +8,7 @@ license = "Apache-2.0"
 readme = "./README.md"
 
 [dependencies]
-fluxus-core = "0.1.0"
+fluxus-core = "0.1"
 fluxus-runtime = { path = "../../crates/fluxus-runtime" }
 fluxus-api = { path = "../../crates/fluxus-api" }
 
