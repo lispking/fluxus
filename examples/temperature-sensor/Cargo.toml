@@ -1,0 +1,19 @@
+[package]
+name = "temperature-sensor"
+description = "Temperature sensor analysis example for Fluxus stream processing engine"
+publish = false
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+readme = "./README.md"
+
+[dependencies]
+fluxus-core = "0.1.0"
+fluxus-runtime = { path = "../../crates/fluxus-runtime" }
+fluxus-api = { path = "../../crates/fluxus-api" }
+
+tokio = { version = "1.36", features = ["full"] }
+anyhow = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+tracing-subscriber = "0.3.19"
+tracing = "0.1.41"

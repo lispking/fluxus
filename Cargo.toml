@@ -1,9 +1,25 @@
 [workspace]
-members = [
-    "fluxus-core",
-    "fluxus-runtime",
-    "fluxus-api",
-    "fluxus-examples"
-]
+members = ["crates/*", "examples/*"]
 
 resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+authors = ["Fluxus Team"]
+description = "Fluxus is a stream processing engine that provides a declarative and efficient way to process and analyze data streams."
+homepage = "https://github.com/lispking/fluxus"
+repository = "https://github.com/lispking/fluxus"
+readme = "README.md"
+categories = ["database", "development-tools", "asynchronous", "science"]
+keywords = [
+    "stream-processing",
+    "real-time",
+    "data-processing",
+    "analytics",
+    "async",
+]
+
+[workspace.metadata.release]
+publish = true
