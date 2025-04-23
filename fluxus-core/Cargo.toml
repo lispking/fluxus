@@ -1,10 +1,12 @@
 [package]
 name = "fluxus-core"
-version = "0.1.0"
-edition = "2024"
-authors = ["Fluxus Team"]
 description = "Core components for Fluxus stream processing engine"
-license = "Apache-2.0"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme.workspace = true
 
 [dependencies]
 tokio = { version = "1.36", features = ["full"] }

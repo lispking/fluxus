@@ -1,10 +1,12 @@
 [package]
 name = "fluxus-api"
-version = "0.1.0"
-edition = "2024"
-authors = ["Fluxus Team"]
 description = "High-level API for Fluxus stream processing engine"
-license = "Apache-2.0"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+readme.workspace = true
 
 [dependencies]
 fluxus-core = { path = "../fluxus-core" }
