@@ -9,8 +9,8 @@ repository.workspace = true
 readme = "README.md"
 
 [dependencies]
-fluxus-core = "0.1.0"
-fluxus-runtime = "0.1.0"
+fluxus-core = "0.1"
+fluxus-runtime = "0.1"
 
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"

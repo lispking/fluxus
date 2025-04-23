@@ -1,5 +1,9 @@
 # Fluxus Stream Processing Engine
 
+[![Crates.io](https://img.shields.io/crates/v/fluxus-core.svg)](https://crates.io/crates/fluxus-core)
+[![Documentation](https://docs.rs/fluxus-core/badge.svg)](https://docs.rs/fluxus-core)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
+
 Fluxus is a lightweight stream processing engine written in Rust, designed for efficient real-time data processing and analysis.
 
 ## Features
