@@ -3,6 +3,7 @@ use crate::window::{WindowConfig, WindowType};
 use async_trait::async_trait;
 use std::collections::HashMap;
 use std::marker::PhantomData;
+use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Built-in window reduce operator
 pub struct WindowReduceOperator<T, F>
@@ -108,8 +109,8 @@ where
 
     async fn on_window_trigger(&mut self) -> StreamResult<Vec<Record<T>>> {
         let mut results = Vec::new();
-        let now = std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
+        let now = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
             .unwrap()
             .as_millis() as i64;
 
@@ -118,20 +119,20 @@ where
             .buffer
             .keys()
             .filter(|&&key| match &self.window.window_type {
-                crate::window::WindowType::Tumbling(duration) => {
+                WindowType::Tumbling(duration) => {
                     key + duration.as_millis() as i64
                         + self.window.allow_lateness.as_millis() as i64
                         <= now
                 }
-                crate::window::WindowType::Sliding(size, _) => {
+                WindowType::Sliding(size, _) => {
                     key + size.as_millis() as i64 + self.window.allow_lateness.as_millis() as i64
                         <= now
                 }
-                crate::window::WindowType::Session(gap) => {
+                WindowType::Session(gap) => {
                     key + gap.as_millis() as i64 + self.window.allow_lateness.as_millis() as i64
                         <= now
                 }
-                crate::window::WindowType::Global => {
+                WindowType::Global => {
                     // Global window doesn't expire based on time, so it's never considered expired here
                     false
                 }
