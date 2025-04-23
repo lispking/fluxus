@@ -10,7 +10,7 @@ repository.workspace = true
 readme = "./README.md"
 
 [dependencies]
-fluxus-core = { path = "../../crates/fluxus-core" }
+fluxus-core = "0.1.0"
 fluxus-runtime = { path = "../../crates/fluxus-runtime" }
 fluxus-api = { path = "../../crates/fluxus-api" }
 

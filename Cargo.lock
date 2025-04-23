@@ -176,7 +176,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fluxus-api",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fluxus-runtime",
  "tokio",
  "tracing",
@@ -229,7 +229,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-trait",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fluxus-runtime",
  "futures",
  "serde",
@@ -256,13 +256,31 @@ dependencies = [
 ]
 
 [[package]]
+name = "fluxus-core"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0bbb58870d7dfcbf7e23259d475756a1ba7ce8ede69cc733c91048395d8a82c0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "csv",
+ "futures",
+ "num_cpus",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "fluxus-runtime"
 version = "0.1.0"
 dependencies = [
  "async-trait",
  "bytes",
  "dashmap",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures",
  "parking_lot",
  "tokio",
@@ -402,7 +420,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fluxus-api",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fluxus-runtime",
  "tokio",
  "tracing",
@@ -456,7 +474,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fluxus-api",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fluxus-runtime",
  "tokio",
  "tracing",
@@ -496,7 +514,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fluxus-api",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fluxus-runtime",
  "tokio",
  "tracing",
@@ -712,7 +730,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fluxus-api",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fluxus-runtime",
  "tokio",
  "tracing",
@@ -743,7 +761,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fluxus-api",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fluxus-runtime",
  "tokio",
  "tracing",
@@ -1028,7 +1046,7 @@ dependencies = [
  "anyhow",
  "clap",
  "fluxus-api",
- "fluxus-core",
+ "fluxus-core 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "fluxus-runtime",
  "tokio",
  "tracing",
