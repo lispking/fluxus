@@ -32,30 +32,7 @@ where
     }
 
     fn get_affected_windows(&self, timestamp: i64) -> Vec<i64> {
-        match &self.window.window_type {
-            WindowType::Tumbling(duration) => {
-                let duration_ms = duration.as_millis() as i64;
-                vec![(timestamp / duration_ms) * duration_ms]
-            }
-            WindowType::Sliding(size, slide) => {
-                let slide_ms = slide.as_millis() as i64;
-                let size_ms = size.as_millis() as i64;
-                let earliest_window = ((timestamp - size_ms) / slide_ms) * slide_ms;
-                let latest_window = (timestamp / slide_ms) * slide_ms;
-
-                (earliest_window..=latest_window)
-                    .step_by(slide.as_millis() as usize)
-                    .filter(|&start| timestamp - start < size_ms)
-                    .collect()
-            }
-            WindowType::Session(gap) => {
-                let gap_ms = gap.as_millis() as i64;
-                vec![timestamp / gap_ms]
-            }
-            WindowType::Global => {
-                vec![0] // Global window can be represented by a single key, here we use 0
-            }
-        }
+        self.window.window_type.get_affected_windows(timestamp)
     }
 
     fn process_window(&self, records: &[Record<T>]) -> Option<Record<T>> {

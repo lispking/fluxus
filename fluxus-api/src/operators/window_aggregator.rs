@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use fluxus_core::{Operator, Record, StreamResult, WindowConfig, window::WindowType};
+use fluxus_core::{Operator, Record, StreamResult, WindowConfig};
 use fluxus_runtime::state::KeyedStateBackend;
 use std::marker::PhantomData;
 
@@ -27,28 +27,7 @@ where
     }
 
     fn get_window_keys(&self, timestamp: i64) -> Vec<u64> {
-        match self.window_config.window_type {
-            WindowType::Tumbling(size) => {
-                let size_ms = size.as_millis() as i64;
-                vec![(timestamp / size_ms) as u64]
-            }
-            WindowType::Sliding(size, slide) => {
-                let size_ms = size.as_millis() as i64;
-                let slide_ms = slide.as_millis() as i64;
-                let earliest_window = ((timestamp - size_ms) / slide_ms) * slide_ms;
-                let latest_window = (timestamp / slide_ms) * slide_ms;
-
-                (earliest_window..=latest_window)
-                    .step_by(slide.as_millis() as usize)
-                    .filter(|&start| timestamp - start < size_ms)
-                    .map(|ts| ts as u64)
-                    .collect()
-            }
-            WindowType::Session(_) => vec![timestamp as u64],
-            WindowType::Global => {
-                vec![0] // Global window can use a single key, here we use 0
-            }
-        }
+        self.window_config.window_type.get_window_keys(timestamp)
     }
 }
 
