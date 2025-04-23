@@ -6,6 +6,8 @@
 
 Fluxus is a lightweight stream processing engine written in Rust, designed for efficient real-time data processing and analysis.
 
+![Fluxus Architecture](docs/architecture.png)
+
 ## Features
 
 - High-performance stream processing
