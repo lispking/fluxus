@@ -13,75 +13,91 @@ Fluxus is a lightweight stream processing engine written in Rust, designed for e
 
 ## Project Structure
 
-- `fluxus-api` - Core API definitions and interfaces
-- `fluxus-core` - Core implementations and data structures
-- `fluxus-runtime` - Runtime engine and execution environment
-- `fluxus-examples` - Example applications demonstrating usage
+- `crates/fluxus-api` - Core API definitions and interfaces
+- `crates/fluxus-core` - Core implementations and data structures
+- `crates/fluxus-runtime` - Runtime engine and execution environment
+- `examples` - Example applications demonstrating usage
 
 ## Examples
 
 The project includes several example applications that demonstrate different use cases:
 
 ### Word Count
+
 Simple word frequency analysis in text streams using tumbling windows.
+
 ```bash
-cargo run --bin fluxus-examples -- word-count
+cargo run --bin word-count
 ```
 
 ### Temperature Sensor Analysis
+
 Processing and analyzing temperature sensor data with sliding windows.
+
 ```bash
-cargo run --bin fluxus-examples -- temperature
+cargo run --bin temperature-sensor
 ```
 
 ### Click Stream Analysis
+
 Analyzing user click streams with session windows.
+
 ```bash
-cargo run --bin fluxus-examples -- click-stream
+cargo run --bin click-stream
 ```
 
 ### Network Log Analysis
+
 Processing network logs with sliding windows and aggregations.
+
 ```bash
-cargo run --bin fluxus-examples -- network-log
+cargo run --bin network-log
 ```
 
 ### View Available Examples
+
 To see all available examples and options:
+
 ```bash
-cargo run --bin fluxus-examples -- --help
+cargo run --bin
 ```
 
 ## Getting Started
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/lispking/fluxus.git
 cd fluxus
 ```
 
 2. Build the project:
+
 ```bash
 cargo build
 ```
 
 3. Run the examples:
+
 ```bash
-cargo run --bin fluxus-examples -- [example-name]
+cargo run --bin [example-name]
 ```
 
 ## Development
 
 ### Prerequisites
+
 - Rust 1.75+ 
 - Cargo 
 
 ### Building
+
 ```bash
 cargo build
 ```
 
 ### Testing
+
 ```bash
 cargo test
 ```
