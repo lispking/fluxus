@@ -9,7 +9,7 @@ repository.workspace = true
 readme = "README.md"
 
 [dependencies]
-fluxus-core = { path = "../fluxus-core" }
+fluxus-core = "0.1.0"
 
 tokio = { version = "1.36", features = ["full"] }
 futures = "0.3"

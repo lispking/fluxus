@@ -47,7 +47,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fluxus-api = { path = "../fluxus-api" }
+fluxus-api = 0.1.0
 ```
 
 See the `fluxus-examples` crate for complete usage examples.
