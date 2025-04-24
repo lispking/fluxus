@@ -1,5 +1,5 @@
 use super::{FilterOperator, MapOperator, WindowReduceOperator};
-use crate::window::WindowConfig;
+use fluxus_utils::window::WindowConfig;
 
 /// Builder for creating stream operators
 pub struct OperatorBuilder;

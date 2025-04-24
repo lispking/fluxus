@@ -1,6 +1,7 @@
+use fluxus_utils::window::WindowConfig;
+
 use crate::operators::WindowAggregator;
 use crate::stream::datastream::DataStream;
-use fluxus_core::WindowConfig;
 
 /// Represents a windowed stream for aggregation operations
 pub struct WindowedStream<T> {

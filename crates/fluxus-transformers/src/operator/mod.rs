@@ -1,5 +1,5 @@
-use crate::models::{Record, StreamResult};
 use async_trait::async_trait;
+use fluxus_utils::models::{Record, StreamResult};
 
 mod builder;
 mod filter;

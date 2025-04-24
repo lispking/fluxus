@@ -1,14 +1,14 @@
 pub mod buffered;
 pub mod console;
-pub mod error_converters;
+pub mod dummy_sink;
 pub mod file;
 
 pub use buffered::BufferedSink;
 pub use console::ConsoleSink;
 pub use file::FileSink;
 
-use crate::models::{Record, StreamResult};
 use async_trait::async_trait;
+use fluxus_utils::models::{Record, StreamResult};
 use std::fmt::Display;
 
 /// Sink trait defines the interface for data output

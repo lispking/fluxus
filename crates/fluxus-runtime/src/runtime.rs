@@ -1,5 +1,9 @@
 use dashmap::DashMap;
-use fluxus_core::{Operator, ParallelConfig, Record, Sink, Source, StreamResult};
+use fluxus_core::ParallelConfig;
+use fluxus_sinks::Sink;
+use fluxus_sources::Source;
+use fluxus_transformers::Operator;
+use fluxus_utils::models::{Record, StreamResult};
 use std::sync::Arc;
 use tokio::sync::{Mutex, mpsc};
 use tokio::task::JoinHandle;

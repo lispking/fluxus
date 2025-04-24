@@ -2,10 +2,9 @@ mod backpressure;
 mod retry_strategy;
 
 pub use backpressure::{BackpressureController, BackpressureStrategy};
+use fluxus_utils::models::StreamResult;
 pub use retry_strategy::RetryStrategy;
 use tokio::time::sleep;
-
-use crate::StreamResult;
 
 /// Error handler for retrying operations
 pub struct ErrorHandler {

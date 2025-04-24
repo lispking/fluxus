@@ -21,9 +21,14 @@ Fluxus is a lightweight stream processing engine written in Rust, designed for e
 
 ## Project Structure
 
+- `crates/fluxus` - Main crate containing the Fluxus engine and its dependencies
 - `crates/fluxus-api` - Core API definitions and interfaces
 - `crates/fluxus-core` - Core implementations and data structures
 - `crates/fluxus-runtime` - Runtime engine and execution environment
+- `crates/fluxus-sinks` - Sink implementations for different data sinks (e.g., Kafka, Console)
+- `crates/fluxus-sources` - Source implementations for different data sources (e.g., Kafka, Console)
+- `crates/fluxus-transforms` - Transformations for stream processing (e.g., map, filter, aggregate)
+- `crates/fluxus-utils` - Utility functions and helpers
 - `examples` - Example applications demonstrating usage
 
 ## Examples

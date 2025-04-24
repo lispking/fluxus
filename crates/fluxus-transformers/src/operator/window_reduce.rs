@@ -1,6 +1,6 @@
-use crate::models::{Record, StreamResult};
-use crate::window::{WindowConfig, WindowType};
 use async_trait::async_trait;
+use fluxus_utils::models::{Record, StreamResult};
+use fluxus_utils::window::{WindowConfig, WindowType};
 use std::collections::HashMap;
 use std::marker::PhantomData;
 use std::time::{SystemTime, UNIX_EPOCH};

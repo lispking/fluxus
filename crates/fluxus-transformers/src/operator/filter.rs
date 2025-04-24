@@ -1,5 +1,5 @@
-use crate::models::{Record, StreamResult};
 use async_trait::async_trait;
+use fluxus_utils::models::{Record, StreamResult};
 use std::marker::PhantomData;
 
 /// Built-in filter operator

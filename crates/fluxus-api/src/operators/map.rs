@@ -1,5 +1,6 @@
 use async_trait::async_trait;
-use fluxus_core::{Operator, Record, StreamResult};
+use fluxus_transformers::Operator;
+use fluxus_utils::models::{Record, StreamResult};
 use std::marker::PhantomData;
 
 pub struct MapOperator<T, R, F> {

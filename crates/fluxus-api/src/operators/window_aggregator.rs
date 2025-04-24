@@ -1,6 +1,10 @@
 use async_trait::async_trait;
-use fluxus_core::{Operator, Record, StreamResult, WindowConfig};
 use fluxus_runtime::state::KeyedStateBackend;
+use fluxus_transformers::Operator;
+use fluxus_utils::{
+    models::{Record, StreamResult},
+    window::WindowConfig,
+};
 use std::marker::PhantomData;
 
 pub struct WindowAggregator<T, A, F> {

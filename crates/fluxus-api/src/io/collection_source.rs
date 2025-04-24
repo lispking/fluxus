@@ -1,5 +1,6 @@
 use async_trait::async_trait;
-use fluxus_core::{Record, Source, StreamResult};
+use fluxus_sources::Source;
+use fluxus_utils::models::{Record, StreamResult};
 use std::collections::VecDeque;
 use std::time::{SystemTime, UNIX_EPOCH};
 

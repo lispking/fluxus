@@ -1,0 +1,32 @@
+[package]
+name = "fluxus"
+description = "Fluxus is a lightweight stream processing engine written in Rust, designed for efficient real-time data processing and analysis."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[dependencies]
+fluxus-api = { path = "../fluxus-api", optional = true }
+fluxus-core = { path = "../fluxus-core", optional = true }
+fluxus-runtime = { path = "../fluxus-runtime", optional = true }
+fluxus-sinks = { path = "../fluxus-sinks", optional = true }
+fluxus-sources = { path = "../fluxus-sources", optional = true }
+fluxus-transformers = { path = "../fluxus-transformers", optional = true }
+fluxus-utils = { path = "../fluxus-utils", optional = true }
+
+[features]
+# Include nothing by default
+default = []
+
+# enable everything
+full = [
+    "fluxus-api",
+    "fluxus-core",
+    "fluxus-runtime",
+    "fluxus-sinks",
+    "fluxus-sources",
+    "fluxus-transformers",
+    "fluxus-utils"
+]

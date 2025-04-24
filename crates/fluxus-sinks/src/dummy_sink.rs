@@ -1,6 +1,6 @@
-use crate::models::Record;
-use crate::models::StreamResult;
-use crate::sink::Sink;
+use crate::Sink;
+use fluxus_utils::models::Record;
+use fluxus_utils::models::StreamResult;
 use std::marker::PhantomData;
 
 /// A dummy sink that discards all records

@@ -1,9 +1,9 @@
 use anyhow::Result;
-use fluxus_api::{
+use fluxus::api::{
     DataStream,
     io::{CollectionSink, CollectionSource},
 };
-use fluxus_core::WindowConfig;
+use fluxus::utils::window::WindowConfig;
 use std::collections::HashMap;
 use std::time::{Duration, SystemTime};
 
