@@ -223,7 +223,7 @@ dependencies = [
 
 [[package]]
 name = "fluxus"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -246,7 +246,7 @@ dependencies = [
 
 [[package]]
 name = "fluxus-api"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -265,7 +265,7 @@ dependencies = [
 
 [[package]]
 name = "fluxus-core"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -286,7 +286,7 @@ dependencies = [
 
 [[package]]
 name = "fluxus-runtime"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "async-trait",
  "bytes",
@@ -305,7 +305,7 @@ dependencies = [
 
 [[package]]
 name = "fluxus-sinks"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -323,7 +323,7 @@ dependencies = [
 
 [[package]]
 name = "fluxus-sources"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -341,7 +341,7 @@ dependencies = [
 
 [[package]]
 name = "fluxus-transformers"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -361,7 +361,7 @@ dependencies = [
 
 [[package]]
 name = "fluxus-utils"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "anyhow",
  "async-trait",
