@@ -1,6 +1,5 @@
 [package]
 name = "fluxus-sources"
-publish = false
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -13,7 +12,7 @@ categories.workspace = true
 keywords.workspace = true
 
 [dependencies]
-fluxus-utils = { path = "../fluxus-utils" }
+fluxus-utils = { path = "../fluxus-utils", version="0.1" }
 
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
