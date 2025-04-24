@@ -9,12 +9,12 @@ repository.workspace = true
 readme = "README.md"
 
 [dependencies]
-fluxus-core = { path = "../fluxus-core" }
-fluxus-runtime = { path = "../fluxus-runtime" }
-fluxus-utils = { path = "../fluxus-utils" }
-fluxus-sinks = { path = "../fluxus-sinks" }
-fluxus-sources = { path = "../fluxus-sources" }
-fluxus-transformers = { path = "../fluxus-transformers" }
+fluxus-core = { path = "../fluxus-core", version="0.1" }
+fluxus-runtime = { path = "../fluxus-runtime", version="0.1" }
+fluxus-utils = { path = "../fluxus-utils", version="0.1" }
+fluxus-sinks = { path = "../fluxus-sinks", version="0.1" }
+fluxus-sources = { path = "../fluxus-sources", version="0.1" }
+fluxus-transformers = { path = "../fluxus-transformers", version="0.1" }
 
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"

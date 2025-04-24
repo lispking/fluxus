@@ -6,15 +6,16 @@ edition.workspace = true
 license.workspace = true
 authors.workspace = true
 repository.workspace = true
+readme = "README.md"
 
 [dependencies]
-fluxus-api = { path = "../fluxus-api", optional = true }
-fluxus-core = { path = "../fluxus-core", optional = true }
-fluxus-runtime = { path = "../fluxus-runtime", optional = true }
-fluxus-sinks = { path = "../fluxus-sinks", optional = true }
-fluxus-sources = { path = "../fluxus-sources", optional = true }
-fluxus-transformers = { path = "../fluxus-transformers", optional = true }
-fluxus-utils = { path = "../fluxus-utils", optional = true }
+fluxus-api = { path = "../fluxus-api", version="0.1", optional = true }
+fluxus-core = { path = "../fluxus-core", version="0.1", optional = true }
+fluxus-runtime = { path = "../fluxus-runtime", version="0.1", optional = true }
+fluxus-sinks = { path = "../fluxus-sinks", version="0.1", optional = true }
+fluxus-sources = { path = "../fluxus-sources", version="0.1", optional = true }
+fluxus-transformers = { path = "../fluxus-transformers", version="0.1", optional = true }
+fluxus-utils = { path = "../fluxus-utils", version="0.1", optional = true }
 
 tokio = { version = "1", features = ["full"] }
 futures = "0.3"
