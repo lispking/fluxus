@@ -225,6 +225,9 @@ dependencies = [
 name = "fluxus"
 version = "0.1.1"
 dependencies = [
+ "anyhow",
+ "async-trait",
+ "csv",
  "fluxus-api",
  "fluxus-core",
  "fluxus-runtime",
@@ -232,6 +235,13 @@ dependencies = [
  "fluxus-sources",
  "fluxus-transformers",
  "fluxus-utils",
+ "futures",
+ "num_cpus",
+ "serde",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]
