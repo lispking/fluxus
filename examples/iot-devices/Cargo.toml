@@ -12,9 +12,7 @@ name = "iot-devices"
 path = "src/main.rs"
 
 [dependencies]
-fluxus-core = "0.1"
-fluxus-runtime = { path = "../../crates/fluxus-runtime" }
-fluxus-api = { path = "../../crates/fluxus-api" }
+fluxus = { path = "../../crates/fluxus", features = ["full"] }
 
 tokio = { version = "1", features = ["full"] }
 anyhow = "1.0"

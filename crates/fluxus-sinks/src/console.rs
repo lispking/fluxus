@@ -1,6 +1,6 @@
-use crate::models::{Record, StreamResult};
-use crate::sink::{ConsoleFormatter, DefaultFormatter, Sink};
+use crate::{ConsoleFormatter, DefaultFormatter, Sink};
 use async_trait::async_trait;
+use fluxus_utils::models::{Record, StreamResult};
 use std::marker::PhantomData;
 
 /// A sink that writes to console

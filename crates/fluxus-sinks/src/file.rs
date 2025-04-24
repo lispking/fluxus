@@ -1,7 +1,7 @@
-use crate::models::{Record, StreamResult};
-use crate::sink::Sink;
+use crate::Sink;
 use async_trait::async_trait;
 use csv;
+use fluxus_utils::models::{Record, StreamResult};
 use serde::Serialize;
 use serde_json;
 use std::marker::PhantomData;

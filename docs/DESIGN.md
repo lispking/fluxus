@@ -32,9 +32,14 @@ The API is type - safe, reducing the likelihood of runtime errors and providing 
 
 ### 3.1 Core Components
 
-- **`fluxus - api`**: Defines the core API and interfaces for the Fluxus engine. It serves as the contract between different components of the engine and user applications.
-- **`fluxus - core`**: Contains the core implementations and data structures. This component is responsible for handling the internal logic of stream processing, such as windowing and operation execution.
-- **`fluxus - runtime`**: Provides the runtime engine and execution environment. It manages the execution of stream processing tasks, including resource allocation and task scheduling.
+- **`fluxus`**: The main crate that serves as the entry point for the Fluxus engine. It provides the API for creating and managing stream processing tasks.
+- **`fluxus-api`**: Defines the core API and interfaces for the Fluxus engine. It serves as the contract between different components of the engine and user applications.
+- **`fluxus-core`**: Contains the core implementations and data structures. This component is responsible for handling the internal logic of stream processing, such as windowing and operation execution.
+- **`fluxus-runtime`**: Provides the runtime engine and execution environment. It manages the execution of stream processing tasks, including resource allocation and task scheduling.
+- **`fluxus-sinks`**: Provides sinks for outputting processed data. Sinks can be used to write data to various destinations, such as databases, files, or external services.
+- **`fluxus-sources`**: Provides sources for ingesting data streams. Sources can be used to read data from various sources, such as Kafka, RabbitMQ, or files.
+- ** `fluxus-transformers`**: Contains transformers for performing data transformations. Transformers can be used to perform operations on data streams, such as mapping, filtering, or aggregating.
+- ** `fluxus-utils`**: Contains utility functions and helper classes. These utilities provide common functionality, such as serialization and deserialization, error handling, and configuration management.
 
 ### 3.2 Data Flow
 

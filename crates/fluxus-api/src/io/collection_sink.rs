@@ -1,5 +1,6 @@
 use async_trait::async_trait;
-use fluxus_core::{Record, Sink, StreamResult};
+use fluxus_sinks::Sink;
+use fluxus_utils::models::{Record, StreamResult};
 use std::sync::{Arc, Mutex};
 
 /// A sink that collects elements into a Vec

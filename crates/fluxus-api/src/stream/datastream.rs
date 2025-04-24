@@ -1,9 +1,11 @@
-use crate::{
-    InnerOperator, InnerSource,
-    operators::{FilterOperator, MapOperator},
-    source::{TransformSource, TransformSourceWithOperator},
+use crate::operators::{FilterOperator, MapOperator};
+use fluxus_core::ParallelConfig;
+use fluxus_sinks::Sink;
+use fluxus_sources::Source;
+use fluxus_transformers::{
+    InnerOperator, InnerSource, Operator, TransformSource, TransformSourceWithOperator,
 };
-use fluxus_core::{Operator, ParallelConfig, Sink, Source, StreamResult, WindowConfig};
+use fluxus_utils::{models::StreamResult, window::WindowConfig};
 use std::sync::Arc;
 
 use super::WindowedStream;

@@ -1,8 +1,8 @@
 pub mod csv;
 pub mod generator;
 
-use crate::models::{Record, StreamResult};
 pub use csv::CsvSource;
+use fluxus_utils::models::{Record, StreamResult};
 pub use generator::GeneratorSource;
 
 use async_trait::async_trait;

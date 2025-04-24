@@ -1,8 +1,9 @@
 use async_trait::async_trait;
-use fluxus_core::{Operator, Record, Source, StreamResult};
+use fluxus_sources::Source;
+use fluxus_utils::models::{Record, StreamResult};
 use std::sync::Arc;
 
-use crate::{InnerOperator, InnerSource};
+use crate::{InnerOperator, InnerSource, Operator};
 
 /// A source that applies a single operator transformation
 #[derive(Clone)]

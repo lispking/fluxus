@@ -1,6 +1,6 @@
-use crate::models::{Record, StreamResult};
-use crate::sink::Sink;
+use crate::Sink;
 use async_trait::async_trait;
+use fluxus_utils::models::{Record, StreamResult};
 use std::time::{Duration, Instant};
 
 /// A sink wrapper that provides buffering capabilities
