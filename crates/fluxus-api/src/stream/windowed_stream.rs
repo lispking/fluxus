@@ -1,7 +1,9 @@
+use std::cmp::Ordering;
+
 use fluxus_transformers::operator::{WindowAllOperator, WindowAnyOperator};
 use fluxus_utils::window::WindowConfig;
 
-use crate::operators::WindowAggregator;
+use crate::operators::{WindowAggregator, WindowSorter};
 use crate::stream::datastream::DataStream;
 
 /// Represents a windowed stream for aggregation operations
@@ -38,6 +40,15 @@ where
     {
         let aller = WindowAllOperator::new(f, self.window_config);
         self.stream.transform(aller)
+    }
+
+    /// Sort values in the window
+    pub fn sort_by<F>(self, f: F) -> DataStream<Vec<T>>
+    where
+        F: FnMut(&T, &T) -> Ordering + Send + Sync + 'static,
+    {
+        let sorter = WindowSorter::new(self.window_config, f);
+        self.stream.transform(sorter)
     }
 }
 
@@ -84,6 +95,27 @@ mod tests {
             assert_eq!(data[2], false);
             assert_eq!(data[3], false);
             assert_eq!(data[4], false);
+        })
+    }
+
+    #[test]
+    fn test_sort_by() {
+        tokio_test::block_on(async {
+            let source = CollectionSource::new(vec!["1", "4444", "55555", "22", "333"]);
+            let sink = CollectionSink::new();
+            DataStream::new(source)
+                .window(WindowConfig::global())
+                .sort_by(|a, b| a.len().cmp(&b.len()))
+                .sink(sink.clone())
+                .await
+                .unwrap();
+            let data = sink.get_data();
+            assert_eq!(data.len(), 5);
+            assert_eq!(data[0], vec!["1"]);
+            assert_eq!(data[1], vec!["1", "4444"]);
+            assert_eq!(data[2], vec!["1", "4444", "55555"]);
+            assert_eq!(data[3], vec!["1", "22", "4444", "55555"]);
+            assert_eq!(data[4], vec!["1", "22", "333", "4444", "55555"]);
         })
     }
 }
