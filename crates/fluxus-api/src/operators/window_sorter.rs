@@ -39,10 +39,6 @@ where
     T: Clone + Send + Sync + 'static,
     F: FnMut(&T, &T) -> Ordering + Send + Sync,
 {
-    async fn init(&mut self) -> StreamResult<()> {
-        Ok(())
-    }
-
     async fn process(&mut self, record: Record<T>) -> StreamResult<Vec<Record<Vec<T>>>> {
         let mut results = Vec::new();
 
@@ -61,9 +57,5 @@ where
         }
 
         Ok(results)
-    }
-
-    async fn close(&mut self) -> StreamResult<()> {
-        Ok(())
     }
 }

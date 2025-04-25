@@ -17,7 +17,9 @@ pub use window_reduce::WindowReduceOperator;
 #[async_trait]
 pub trait Operator<In, Out>: Send {
     /// Initialize the operator
-    async fn init(&mut self) -> StreamResult<()>;
+    async fn init(&mut self) -> StreamResult<()> {
+        Ok(())
+    }
 
     /// Process a single record and return zero or more output records
     async fn process(&mut self, record: Record<In>) -> StreamResult<Vec<Record<Out>>>;
@@ -28,5 +30,7 @@ pub trait Operator<In, Out>: Send {
     }
 
     /// Close the operator and release resources
-    async fn close(&mut self) -> StreamResult<()>;
+    async fn close(&mut self) -> StreamResult<()> {
+        Ok(())
+    }
 }
