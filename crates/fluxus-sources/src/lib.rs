@@ -1,6 +1,11 @@
 pub mod csv;
 pub mod generator;
 
+#[cfg(feature = "enable-gharchive")]
+pub mod gharchive;
+#[cfg(feature = "enable-gharchive")]
+pub use gharchive::GHarchiveSource;
+
 pub use csv::CsvSource;
 use fluxus_utils::models::{Record, StreamResult};
 pub use generator::GeneratorSource;

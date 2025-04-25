@@ -9,6 +9,7 @@ This crate provides various source implementations for the Fluxus stream process
 ### Key Sources
 - `CsvSource` - Read data from CSV files.
 - `GeneratorSource` - Generate data for testing purposes.
+- `GHarchiveSource` - Read data from Github Archive, support local file and http get ( https://data.gharchive.org/  )
 
 ## Usage
 
