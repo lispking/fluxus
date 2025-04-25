@@ -7,6 +7,7 @@ use fluxus_utils::{
 };
 use std::{cmp::Ordering, marker::PhantomData};
 
+/// sort_by operator for windowed stream.
 pub struct WindowSorter<T, F> {
     window_config: WindowConfig,
     f: F,
@@ -47,10 +48,9 @@ where
 
         for window_key in self.get_window_keys(record.timestamp) {
             let mut current = self.state.get(&window_key).unwrap_or_default();
-            let index = match current.binary_search_by(|prob| (self.f)(prob, &record.data)) {
-                Ok(i) => i,
-                Err(i) => i,
-            };
+            let index = current
+                .binary_search_by(|prob| (self.f)(prob, &record.data))
+                .unwrap_or_else(|i| i);
             current.insert(index, record.data.clone());
 
             self.state.set(window_key, current.clone());
