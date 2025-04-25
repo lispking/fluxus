@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/fluxus-logo-200-transparent.png" alt="Fluxus Logo">
+</p>
+
 # Fluxus Stream Processing Engine
 
 [![Crates.io](https://img.shields.io/crates/v/fluxus-core.svg)](https://crates.io/crates/fluxus-core)
