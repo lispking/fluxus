@@ -28,8 +28,7 @@ mod tests {
         let mut gh_source_gzip = gharchive::GHarchiveSource::new(uri);
         gh_source_gzip.init().await.expect("init failed");
 
-        for n in 0..100 {
-            let mut foo = gh_source_gzip.next().await.expect("error1");
+        for n in 0..100 {            
             println!("test={:?}", gh_source_gzip.next().await.expect("error"));
         }
     }
