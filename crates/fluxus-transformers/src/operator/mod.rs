@@ -4,11 +4,13 @@ use fluxus_utils::models::{Record, StreamResult};
 mod builder;
 mod filter;
 mod map;
+mod window_match;
 mod window_reduce;
 
 pub use builder::OperatorBuilder;
 pub use filter::FilterOperator;
 pub use map::MapOperator;
+pub use window_match::{WindowAllOperator, WindowAnyOperator};
 pub use window_reduce::WindowReduceOperator;
 
 /// Operator trait defines the interface for stream processing operators
