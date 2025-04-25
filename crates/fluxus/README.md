@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/fluxus-logo-200-transparent.png" alt="Fluxus Logo">
+  <img src="../../docs/images/fluxus-logo-200-transparent.png" alt="Fluxus Logo">
 </p>
 
 # Fluxus Stream Processing Engine
@@ -12,7 +12,7 @@
 
 Fluxus is a lightweight stream processing engine written in Rust, designed for efficient real-time data processing and analysis.
 
-![Fluxus Architecture](docs/architecture.png)
+![Fluxus Architecture](../../docs/architecture.png)
 
 ## Features
 
