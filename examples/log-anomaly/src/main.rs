@@ -142,7 +142,7 @@ fn generate_sample_events() -> Vec<LogEvent> {
             };
 
             let latency = base_latency + (rand_float() * 1000.0) as u64;
-            let message = format!("Processing request #{}", i);
+            let message = format!("Processing request #{i}");
 
             let event = LogEvent {
                 service: service.to_string(),
