@@ -121,7 +121,7 @@ fn generate_sample_data() -> Vec<IoTData> {
             let battery_drain = (i / 20) as u8; // Simulate battery consumption
 
             let reading = IoTData {
-                device_id: format!("DEV_{:03}", j),
+                device_id: format!("DEV_{j:03}"),
                 device_type: device_type.to_string(),
                 value: base_value + value_variation,
                 battery_level: 100 - battery_drain,

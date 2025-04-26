@@ -53,7 +53,7 @@ async fn main() -> Result<()> {
         let mut words: Vec<_> = result.iter().collect();
         words.sort_by(|a, b| b.1.cmp(a.1).then(a.0.cmp(b.0)));
         for (word, count) in words {
-            println!("  {}: {}", word, count);
+            println!("  {word}: {count}");
         }
     }
 
