@@ -1,4 +1,6 @@
 use std::cmp::Ordering;
+use std::collections::HashSet;
+use std::hash::Hash;
 
 use fluxus_transformers::operator::{WindowAllOperator, WindowAnyOperator};
 use fluxus_utils::window::WindowConfig;
@@ -80,6 +82,43 @@ where
             SortOrder::Asc => v1.cmp(v2),
             SortOrder::Desc => v2.cmp(v1),
         })
+    }
+}
+
+impl<T> WindowedStream<T>
+where
+    T: Eq + Hash + Clone + Send + Sync + 'static,
+{
+    /// Distinct values
+    pub fn distinct(self) -> DataStream<HashSet<T>> {
+        self.aggregate(HashSet::new(), |mut set, value| {
+            set.insert(value);
+            set
+        })
+    }
+}
+
+impl<T> WindowedStream<T>
+where
+    T: Clone + Send + Sync + 'static,
+{
+    /// Distinct values by key. When the same key is encountered, the first occurrence of the value is retained
+    pub fn distinct_by_key<F, K>(self, f: F) -> DataStream<Vec<T>>
+    where
+        F: Fn(&T) -> K + Sync + Send + 'static,
+        K: Eq + Hash + Clone + Sync + Send + 'static,
+    {
+        let keys = HashSet::new();
+        let data = vec![];
+        self.aggregate((keys, data), move |(mut keys, mut data), value| {
+            let k = f(&value);
+            if !keys.contains(&k) {
+                keys.insert(k);
+                data.push(value);
+            }
+            (keys, data)
+        })
+        .map(|(_, data)| data)
     }
 }
 
@@ -256,6 +295,39 @@ mod tests {
                     rev(vec!["1st", "2nd", "3rd", "4th", "5th"]),
                 ]
             );
+        })
+    }
+
+    #[test]
+    fn test_distinct() {
+        tokio_test::block_on(async {
+            let source = CollectionSource::new(vec!["1", "22", "1", "22", "333", "333"]);
+            let sink = CollectionSink::new();
+            DataStream::new(source)
+                .window(WindowConfig::global())
+                .distinct()
+                .sink(sink.clone())
+                .await
+                .unwrap();
+            let data = sink.get_data();
+            assert_eq!(data.len(), 6);
+            assert_eq!(data[5].len(), 3);
+            assert!(data[5].contains("1"));
+            assert!(data[5].contains("22"));
+            assert!(data[5].contains("333"));
+
+            let source = CollectionSource::new(vec!["1", "11", "111", "111"]);
+            let sink = CollectionSink::new();
+            DataStream::new(source)
+                .window(WindowConfig::global())
+                .distinct_by_key(|s| s.as_bytes()[0])
+                .sink(sink.clone())
+                .await
+                .unwrap();
+            let data = sink.get_data();
+            assert_eq!(data.len(), 4);
+            assert_eq!(data[3].len(), 1);
+            assert!(data[3].contains(&"1"));
         })
     }
 }
