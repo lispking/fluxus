@@ -9,6 +9,7 @@ use crate::{InnerOperator, InnerSource};
 pub struct TransformSource<T: Clone> {
     inner: Arc<InnerSource<T>>,
     operators: Vec<Arc<InnerOperator<T, T>>>,
+    buffer: Vec<Record<T>>,
 }
 
 impl<T: Clone + Send + Sync + 'static> TransformSource<T> {
@@ -16,6 +17,7 @@ impl<T: Clone + Send + Sync + 'static> TransformSource<T> {
         Self {
             inner,
             operators: Vec::new(),
+            buffer: Vec::new(),
         }
     }
 
@@ -31,51 +33,51 @@ impl<T: Clone + Send + Sync + 'static> Source<T> for TransformSource<T> {
     }
 
     async fn next(&mut self) -> StreamResult<Option<Record<T>>> {
-        loop {
-            let inner = Arc::clone(&self.inner);
-            let record = unsafe {
-                // Safe because we have exclusive access through &mut self
-                let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
-                source.next().await?
-            };
-
-            match record {
-                Some(record) => {
-                    let mut current_record = Some(record);
-                    let mut filtered_out = false;
-
-                    // Apply each operator in sequence
-                    for op in &self.operators {
-                        if let Some(rec) = current_record {
-                            let operator = Arc::clone(op);
-                            let results = unsafe {
-                                // Safe because we have exclusive access through &mut self
-                                let op = &mut *(Arc::as_ptr(&operator) as *mut InnerOperator<T, T>);
-                                op.process(rec).await?
-                            };
-
-                            // If the operator filtered out the record (empty results), mark as filtered
-                            if results.is_empty() {
-                                filtered_out = true;
-                                current_record = None;
-                                break;
-                            } else {
-                                // Otherwise, take the first result for the next operator
-                                current_record = Some(results[0].clone());
-                            }
-                        }
-                    }
-
-                    // If the record was filtered out, continue to the next record
-                    if filtered_out {
-                        continue;
-                    }
-
-                    return Ok(current_record);
-                }
-                None => return Ok(None),
-            }
+        // If we have records in the buffer, return one
+        if !self.buffer.is_empty() {
+            return Ok(Some(self.buffer.pop().unwrap()));
         }
+
+        let inner = Arc::clone(&self.inner);
+        let record = unsafe {
+            // Safe because we have exclusive access through &mut self
+            let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
+            source.next().await?
+        };
+
+        // If there's no next record, return None
+        let Some(record) = record else {
+            return Ok(None);
+        };
+
+        let mut records = vec![record];
+
+        for op in &self.operators {
+            // Process each record through the current operator and collect all results
+            let mut current_op_results = Vec::new();
+
+            for rec in records {
+                let operator = Arc::clone(op);
+                let results = unsafe {
+                    // Safe because we have exclusive access through &mut self
+                    let op = &mut *(Arc::as_ptr(&operator) as *mut InnerOperator<T, T>);
+                    op.process(rec).await?
+                };
+
+                current_op_results.extend(results);
+            }
+
+            if current_op_results.is_empty() {
+                return self.next().await;
+            }
+
+            records = current_op_results;
+        }
+
+        self.buffer = records;
+        self.buffer.reverse();
+
+        Ok(self.buffer.pop())
     }
 
     async fn close(&mut self) -> StreamResult<()> {
