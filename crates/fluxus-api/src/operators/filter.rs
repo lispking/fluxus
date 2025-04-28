@@ -56,13 +56,13 @@ mod tests {
             let sink = CollectionSink::new();
 
             DataStream::new(source)
-            .filter(|x| x % 2 == 0)
-            .sink(sink.clone())
-            .await
-            .unwrap();
+                .filter(|x| x % 2 == 0)
+                .sink(sink.clone())
+                .await
+                .unwrap();
 
             let data = sink.get_data();
-            println!( "data: {:?}", data);
+            println!("data: {:?}", data);
             assert_eq!(data.len(), 2);
             assert_eq!(data[0], 2);
             assert_eq!(data[1], 4);
