@@ -31,11 +31,50 @@ impl<T: Clone + Send + Sync + 'static> Source<T> for TransformSource<T> {
     }
 
     async fn next(&mut self) -> StreamResult<Option<Record<T>>> {
-        let inner = Arc::clone(&self.inner);
-        unsafe {
-            // Safe because we have exclusive access through &mut self
-            let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
-            source.next().await
+        loop {
+            let inner = Arc::clone(&self.inner);
+            let record = unsafe {
+                // Safe because we have exclusive access through &mut self
+                let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
+                source.next().await?
+            };
+
+            match record {
+                Some(record) => {
+                    let mut current_record = Some(record);
+                    let mut filtered_out = false;
+
+                    // Apply each operator in sequence
+                    for op in &self.operators {
+                        if let Some(rec) = current_record {
+                            let operator = Arc::clone(op);
+                            let results = unsafe {
+                                // Safe because we have exclusive access through &mut self
+                                let op = &mut *(Arc::as_ptr(&operator) as *mut InnerOperator<T, T>);
+                                op.process(rec).await?
+                            };
+
+                            // If the operator filtered out the record (empty results), mark as filtered
+                            if results.is_empty() {
+                                filtered_out = true;
+                                current_record = None;
+                                break;
+                            } else {
+                                // Otherwise, take the first result for the next operator
+                                current_record = Some(results[0].clone());
+                            }
+                        }
+                    }
+
+                    // If the record was filtered out, continue to the next record
+                    if filtered_out {
+                        continue;
+                    }
+
+                    return Ok(current_record);
+                }
+                None => return Ok(None),
+            }
         }
     }
 
