@@ -24,6 +24,15 @@ impl<T> CollectionSink<T> {
             .lock()
             .map_or_else(|p| p.into_inner().clone(), |d| d.clone())
     }
+
+    pub fn get_last_element(&self) -> Option<T>
+    where
+        T: Clone,
+    {
+        self.data
+            .lock()
+            .map_or_else(|p| p.into_inner().last().cloned(), |d| d.last().cloned())
+    }
 }
 
 #[async_trait]

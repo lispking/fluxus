@@ -47,6 +47,14 @@ async fn main() -> Result<()> {
         .await?;
 
     // Print the results
+    println!("\nWord count last result:");
+    let last_result = sink.get_last_element().unwrap();
+    let mut words: Vec<_> = last_result.iter().collect();
+    words.sort_by(|a, b| b.1.cmp(a.1).then(a.0.cmp(b.0)));
+    for (word, count) in words {
+        println!("  {word}: {count}");
+    }
+
     println!("\nWord count results:");
     for result in sink.get_data() {
         println!("\nWindow results:");
