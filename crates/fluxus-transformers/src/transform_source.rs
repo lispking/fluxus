@@ -35,7 +35,7 @@ impl<T: Clone + Send + Sync + 'static> Source<T> for TransformSource<T> {
     async fn next(&mut self) -> StreamResult<Option<Record<T>>> {
         // If we have records in the buffer, return one
         if !self.buffer.is_empty() {
-            return Ok(Some(self.buffer.pop().unwrap()));
+            return Ok(self.buffer.pop());
         }
 
         let inner = Arc::clone(&self.inner);
