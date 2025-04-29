@@ -1,5 +1,5 @@
-use std::cmp::Ordering;
-use std::collections::HashSet;
+use std::cmp::{Ordering, Reverse};
+use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::hash::Hash;
 
 use fluxus_transformers::operator::{WindowAllOperator, WindowAnyOperator};
@@ -83,6 +83,24 @@ where
             SortOrder::Desc => v2.cmp(v1),
         })
     }
+
+    /// Get the top k values in the window, the values are sorted in descending order
+    pub fn top_k(self, k: usize) -> DataStream<Vec<T>> {
+        let init = BinaryHeap::<Reverse<T>>::new();
+        let res = self.aggregate(init, move |mut heap, v| {
+            heap.push(Reverse(v));
+            if heap.len() > k {
+                heap.pop();
+            }
+            heap
+        });
+        res.map(|heap| {
+            heap.into_sorted_vec()
+                .into_iter()
+                .map(|Reverse(v)| v)
+                .collect()
+        })
+    }
 }
 
 impl<T> WindowedStream<T>
@@ -119,6 +137,41 @@ where
             (keys, data)
         })
         .map(|(_, data)| data)
+    }
+
+    /// Get top k values by key. The values are sorted by key in descending order
+    pub fn top_k_by_key<F, K>(self, n: usize, f: F) -> DataStream<Vec<T>>
+    where
+        F: Fn(&T) -> K + Sync + Send + 'static,
+        K: Ord + Eq + Hash + Clone + Sync + Send + 'static,
+    {
+        // Store the top k keys
+        let keys = BinaryHeap::<Reverse<K>>::new();
+        // Store the values by key
+        let kvs: HashMap<K, Vec<T>> = HashMap::new();
+        self.aggregate((keys, kvs), move |(mut keys, mut kvs), value| {
+            let k = f(&value);
+
+            keys.push(Reverse(k.clone()));
+            kvs.entry(k).or_default().push(value);
+
+            if keys.len() > n {
+                if let Some(Reverse(min_k)) = keys.pop() {
+                    kvs.get_mut(&min_k).map(|v| v.pop());
+                }
+            }
+            (keys, kvs)
+        })
+        .map(|(top_keys, mut kvs)| {
+            top_keys
+                .into_sorted_vec()
+                .into_iter()
+                .fold(vec![], move |mut acc, Reverse(k)| {
+                    let values = kvs.remove(&k).unwrap_or_default();
+                    acc.extend(values);
+                    acc
+                })
+        })
     }
 }
 
@@ -328,6 +381,44 @@ mod tests {
             assert_eq!(data.len(), 4);
             assert_eq!(data[3].len(), 1);
             assert!(data[3].contains(&"1"));
+        })
+    }
+
+    #[test]
+    fn test_top_k() {
+        tokio_test::block_on(async {
+            let source = CollectionSource::new(vec![1, 2, 3, 4, 5]);
+            let sink = CollectionSink::new();
+            DataStream::new(source)
+                .window(WindowConfig::global())
+                .top_k(3)
+                .sink(sink.clone())
+                .await
+                .unwrap();
+            let data = sink.get_data();
+            assert_eq!(data.len(), 5);
+            assert_eq!(data[0], vec![1]);
+            assert_eq!(data[1], vec![2, 1]);
+            assert_eq!(data[2], vec![3, 2, 1]);
+            assert_eq!(data[3], vec![4, 3, 2]);
+            assert_eq!(data[4], vec![5, 4, 3]);
+
+            let source = CollectionSource::new(vec!["1", "2", "3", "3", "3"]);
+            let sink = CollectionSink::new();
+            DataStream::new(source)
+                .window(WindowConfig::global())
+                .top_k_by_key(3, |s| s.as_bytes()[0])
+                .sink(sink.clone())
+                .await
+                .unwrap();
+            let data = sink.get_data();
+            dbg!(&data);
+            assert_eq!(data.len(), 5);
+            assert_eq!(data[0], vec!["1"]);
+            assert_eq!(data[1], vec!["2", "1"]);
+            assert_eq!(data[2], vec!["3", "2", "1"]);
+            assert_eq!(data[3], vec!["3", "3", "2"]);
+            assert_eq!(data[4], vec!["3", "3", "3"]);
         })
     }
 }
