@@ -54,7 +54,7 @@ impl<T: Clone + Send + Sync + 'static> Source<T> for TransformSource<T> {
 
         for op in &self.operators {
             // Process each record through the current operator and collect all results
-            let mut current_op_results = Vec::new();
+            let mut processed = Vec::new();
 
             for rec in records {
                 let operator = Arc::clone(op);
@@ -64,14 +64,14 @@ impl<T: Clone + Send + Sync + 'static> Source<T> for TransformSource<T> {
                     op.process(rec).await?
                 };
 
-                current_op_results.extend(results);
+                processed.extend(results);
             }
 
-            if current_op_results.is_empty() {
+            if processed.is_empty() {
                 return self.next().await;
             }
 
-            records = current_op_results;
+            records = processed;
         }
 
         self.buffer = records;
