@@ -50,36 +50,54 @@ where
 
     async fn next(&mut self) -> StreamResult<Option<Record<R>>> {
         let inner = Arc::clone(&self.inner);
-        let mut record = unsafe {
+        let record = unsafe {
             // Safe because we have exclusive access through &mut self
             let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
             source.next().await?
         };
 
+        // If there's no next record, return None
+        let Some(record) = record else {
+            return Ok(None);
+        };
+
+        let mut records = vec![record];
+
         // Process through existing operators first
-        if let Some(mut rec) = record {
-            for op in &self.operators {
+        for op in &self.operators {
+            // Process each record through the current operator and collect all results
+            let mut processed = Vec::new();
+
+            for rec in records {
                 let operator = Arc::clone(op);
                 let results = unsafe {
                     let op = &mut *(Arc::as_ptr(&operator) as *mut InnerOperator<T, T>);
                     op.process(rec).await?
                 };
 
-                if results.is_empty() {
-                    return self.next().await;
-                }
-                rec = results[0].clone();
+                processed.extend(results);
             }
-            record = Some(rec);
-        };
 
-        Ok(match record {
-            Some(rec) => unsafe {
+            if processed.is_empty() {
+                return self.next().await;
+            }
+
+            records = processed;
+        }
+
+        if records.is_empty() {
+            return Ok(None);
+        }
+
+        let mut final_results = Vec::new();
+        for rec in records {
+            final_results.extend(unsafe {
                 let op = &mut *(Arc::as_ptr(&self.operator) as *mut InnerOperator<T, R>);
-                op.process(rec).await?.into_iter().next()
-            },
-            None => None,
-        })
+                op.process(rec).await?
+            });
+        }
+
+        Ok(final_results.into_iter().next())
     }
 
     async fn close(&mut self) -> StreamResult<()> {
