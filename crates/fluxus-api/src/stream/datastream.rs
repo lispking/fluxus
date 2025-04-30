@@ -6,7 +6,10 @@ use fluxus_transformers::{
     InnerOperator, InnerSource, Operator, TransformSource, TransformSourceWithOperator,
 };
 use fluxus_utils::{models::StreamResult, window::WindowConfig};
-use std::sync::Arc;
+use std::sync::{
+    Arc,
+    atomic::{AtomicUsize, Ordering},
+};
 
 use super::WindowedStream;
 
@@ -61,6 +64,19 @@ where
         let filter = FilterOperator::new(f);
         self.operators.push(Arc::new(filter));
         self
+    }
+
+    /// Apply a limit transformation that keeps the first n elements
+    pub fn limit(self, n: usize) -> Self {
+        let n = AtomicUsize::new(n);
+        self.filter(move |_| {
+            if n.load(Ordering::SeqCst) > 0 {
+                n.fetch_sub(1, Ordering::SeqCst);
+                true
+            } else {
+                false
+            }
+        })
     }
 
     /// Transform the stream using a custom operator

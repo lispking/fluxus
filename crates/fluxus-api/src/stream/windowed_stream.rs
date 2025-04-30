@@ -44,6 +44,17 @@ where
         self.stream.transform(aller)
     }
 
+    /// Limit the number of values in the window
+    pub fn limit(self, n: usize) -> DataStream<Vec<T>> {
+        let limiter = WindowAggregator::new(self.window_config, vec![], move |mut acc, value| {
+            if acc.len() < n {
+                acc.push(value);
+            }
+            acc
+        });
+        self.stream.transform(limiter)
+    }
+
     /// Sort values in the window
     pub fn sort_by<F>(self, f: F) -> DataStream<Vec<T>>
     where
