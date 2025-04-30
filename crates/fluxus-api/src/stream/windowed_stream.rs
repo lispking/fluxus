@@ -5,7 +5,9 @@ use std::hash::Hash;
 use fluxus_transformers::operator::{WindowAllOperator, WindowAnyOperator};
 use fluxus_utils::window::WindowConfig;
 
-use crate::operators::{SortOrder, WindowAggregator, WindowSorter, WindowTimestampSorter};
+use crate::operators::{
+    SortOrder, WindowAggregator, WindowSkipper, WindowSorter, WindowTimestampSorter,
+};
 use crate::stream::datastream::DataStream;
 
 /// Represents a windowed stream for aggregation operations
@@ -69,6 +71,12 @@ where
     pub fn sort_by_ts_desc(self) -> DataStream<Vec<T>> {
         let sorter = WindowTimestampSorter::new(self.window_config, SortOrder::Desc);
         self.stream.transform(sorter)
+    }
+
+    /// Skip
+    pub fn skip(self, n: usize) -> DataStream<Vec<T>> {
+        let skipper = WindowSkipper::new(self.window_config, n);
+        self.stream.transform(skipper)
     }
 }
 
@@ -419,6 +427,27 @@ mod tests {
             assert_eq!(data[2], vec!["3", "2", "1"]);
             assert_eq!(data[3], vec!["3", "3", "2"]);
             assert_eq!(data[4], vec!["3", "3", "3"]);
+        })
+    }
+
+    #[test]
+    fn test_skip() {
+        tokio_test::block_on(async {
+            let source = CollectionSource::new(vec![1, 2, 3, 4, 5]);
+            let sink = CollectionSink::new();
+            DataStream::new(source)
+                .window(WindowConfig::global())
+                .skip(2)
+                .sink(sink.clone())
+                .await
+                .unwrap();
+            let data = sink.get_data();
+            assert_eq!(data.len(), 5);
+            assert_eq!(data[0], Vec::<i32>::new());
+            assert_eq!(data[1], Vec::<i32>::new());
+            assert_eq!(data[2], vec![3]);
+            assert_eq!(data[3], vec![3, 4]);
+            assert_eq!(data[4], vec![3, 4, 5]);
         })
     }
 }
