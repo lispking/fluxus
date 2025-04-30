@@ -1,1 +1,1 @@
-mod datastream;
+mod datastreams;
