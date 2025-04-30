@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../../docs/images/fluxus-logo-200-transparent.png" alt="Fluxus Logo">
+  <img src="../../docs/images/fluxus-logo.png" width="200" alt="Fluxus Logo">
 </p>
 
 # Fluxus Stream Processing Engine
