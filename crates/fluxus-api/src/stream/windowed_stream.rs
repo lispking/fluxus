@@ -1,5 +1,5 @@
 use std::cmp::{Ordering, Reverse};
-use std::collections::{BinaryHeap, HashMap, HashSet};
+use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use std::hash::Hash;
 
 use fluxus_transformers::operator::{WindowAllOperator, WindowAnyOperator};
@@ -55,6 +55,21 @@ where
             acc
         });
         self.stream.transform(limiter)
+    }
+
+    /// Retain last n values in the window
+    pub fn tail(self, n: usize) -> DataStream<Vec<T>> {
+        let init = VecDeque::with_capacity(n);
+        let limiter = WindowAggregator::new(self.window_config, init, move |mut acc, value| {
+            acc.push_back(value);
+            if acc.len() > n {
+                acc.pop_front();
+            }
+            acc
+        });
+        self.stream
+            .transform(limiter)
+            .map(|d| d.into_iter().collect())
     }
 
     /// Sort values in the window
