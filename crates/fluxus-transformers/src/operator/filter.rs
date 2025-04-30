@@ -29,19 +29,11 @@ where
     T: Send,
     F: Fn(&T) -> bool + Send + Sync,
 {
-    async fn init(&mut self) -> StreamResult<()> {
-        Ok(())
-    }
-
     async fn process(&mut self, record: Record<T>) -> StreamResult<Vec<Record<T>>> {
         if (self.func)(&record.data) {
             Ok(vec![record])
         } else {
             Ok(vec![])
         }
-    }
-
-    async fn close(&mut self) -> StreamResult<()> {
-        Ok(())
     }
 }

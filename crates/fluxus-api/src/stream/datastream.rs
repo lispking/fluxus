@@ -85,7 +85,7 @@ where
         O: Operator<T, R> + Send + Sync + 'static,
         R: Clone + Send + Sync + 'static,
     {
-        let source = TransformSourceWithOperator::new(self.source, operator);
+        let source = TransformSourceWithOperator::new(self.source, operator, self.operators);
         DataStream {
             source: Arc::new(source),
             operators: Vec::new(),

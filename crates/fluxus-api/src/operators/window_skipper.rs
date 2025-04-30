@@ -36,10 +36,6 @@ impl<T> Operator<T, Vec<T>> for WindowSkipper<T>
 where
     T: Clone + Send + Sync + 'static,
 {
-    async fn init(&mut self) -> StreamResult<()> {
-        Ok(())
-    }
-
     async fn process(&mut self, record: Record<T>) -> StreamResult<Vec<Record<Vec<T>>>> {
         let mut results = Vec::new();
 
@@ -54,9 +50,5 @@ where
         }
 
         Ok(results)
-    }
-
-    async fn close(&mut self) -> StreamResult<()> {
-        Ok(())
     }
 }

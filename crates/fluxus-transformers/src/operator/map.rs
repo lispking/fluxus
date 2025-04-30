@@ -32,16 +32,8 @@ where
     Out: Send,
     F: Fn(In) -> Out + Send + Sync,
 {
-    async fn init(&mut self) -> StreamResult<()> {
-        Ok(())
-    }
-
     async fn process(&mut self, record: Record<In>) -> StreamResult<Vec<Record<Out>>> {
         let output = (self.func)(record.data);
         Ok(vec![Record::with_timestamp(output, record.timestamp)])
-    }
-
-    async fn close(&mut self) -> StreamResult<()> {
-        Ok(())
     }
 }

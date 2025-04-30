@@ -27,16 +27,8 @@ where
     R: Clone + Send + Sync + 'static,
     F: Fn(T) -> R + Send + Sync,
 {
-    async fn init(&mut self) -> StreamResult<()> {
-        Ok(())
-    }
-
     async fn process(&mut self, record: Record<T>) -> StreamResult<Vec<Record<R>>> {
         let result = (self.f)(record.data);
         Ok(vec![Record::with_timestamp(result, record.timestamp)])
-    }
-
-    async fn close(&mut self) -> StreamResult<()> {
-        Ok(())
     }
 }

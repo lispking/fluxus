@@ -25,6 +25,7 @@ async fn main() -> Result<()> {
 
     // Build and execute the streaming pipeline
     DataStream::new(source)
+        .filter(|line| line.starts_with("hello"))
         // Split text into words
         .map(|line| {
             line.split_whitespace()
