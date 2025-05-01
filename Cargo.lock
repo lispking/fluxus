@@ -244,6 +244,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "event-timestamp"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "fluxus",
+ "tokio",
+]
+
+[[package]]
 name = "fluxus"
 version = "0.1.3"
 dependencies = [

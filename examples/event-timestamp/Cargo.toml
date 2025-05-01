@@ -1,0 +1,13 @@
+[package]
+name = "event-timestamp"
+version = "0.1.0"
+edition = "2024"
+
+[[example]]
+name = "event-timestamp"
+path = "src/main.rs"
+
+[dependencies]
+fluxus = { path = "../../crates/fluxus", features = ["full"] }
+anyhow = "1.0"
+tokio = { version = "1.0", features = ["full"] }
