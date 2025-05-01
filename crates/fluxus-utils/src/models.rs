@@ -2,21 +2,12 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use thiserror::Error;
 
 /// Record represents a single data record in the stream
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Record<T> {
     /// The actual data payload
     pub data: T,
     /// Timestamp of the record (in milliseconds)
     pub timestamp: i64,
-}
-
-impl<T: Clone> Clone for Record<T> {
-    fn clone(&self) -> Self {
-        Self {
-            data: self.data.clone(),
-            timestamp: self.timestamp,
-        }
-    }
 }
 
 impl<T> Record<T> {
