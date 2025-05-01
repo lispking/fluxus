@@ -97,8 +97,6 @@ where
 {
     async fn process(&mut self, record: Record<T>) -> StreamResult<Vec<Record<Vec<T>>>> {
         let mut raw_results = Vec::new();
-        dbg!(record.timestamp);
-
         for window_key in self.get_window_keys(record.timestamp) {
             let mut current = self.state.get(&window_key).unwrap_or_default();
             let index = current
