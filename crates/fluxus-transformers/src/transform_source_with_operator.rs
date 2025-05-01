@@ -3,7 +3,7 @@ use fluxus_sources::Source;
 use fluxus_utils::models::{Record, StreamResult};
 use std::sync::Arc;
 
-use crate::{InnerOperator, InnerSource, Operator};
+use crate::{InnerOperator, InnerSource, Operator, TransformBase};
 
 /// A source that applies a single operator transformation
 #[derive(Clone)]
@@ -12,9 +12,8 @@ where
     T: Clone,
     R: Clone,
 {
-    inner: Arc<InnerSource<T>>,
+    base: TransformBase<T>,
     operator: Arc<InnerOperator<T, R>>,
-    operators: Vec<Arc<InnerOperator<T, T>>>,
 }
 
 impl<T, R> TransformSourceWithOperator<T, R>
@@ -30,10 +29,11 @@ where
     where
         O: Operator<T, R> + Send + Sync + 'static,
     {
+        let mut base = TransformBase::new(inner);
+        base.set_operators(operators);
         Self {
-            inner,
+            base,
             operator: Arc::new(operator),
-            operators,
         }
     }
 }
@@ -49,44 +49,17 @@ where
     }
 
     async fn next(&mut self) -> StreamResult<Option<Record<R>>> {
-        let inner = Arc::clone(&self.inner);
-        let record = unsafe {
-            // Safe because we have exclusive access through &mut self
-            let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
-            source.next().await?
-        };
+        let record = self.base.get_next_record().await?;
 
         // If there's no next record, return None
         let Some(record) = record else {
             return Ok(None);
         };
 
-        let mut records = vec![record];
-
-        // Process through existing operators first
-        for op in &self.operators {
-            // Process each record through the current operator and collect all results
-            let mut processed = Vec::new();
-
-            for rec in records {
-                let operator = Arc::clone(op);
-                let results = unsafe {
-                    let op = &mut *(Arc::as_ptr(&operator) as *mut InnerOperator<T, T>);
-                    op.process(rec).await?
-                };
-
-                processed.extend(results);
-            }
-
-            if processed.is_empty() {
-                return self.next().await;
-            }
-
-            records = processed;
-        }
+        let records = self.base.process_operators(record).await?;
 
         if records.is_empty() {
-            return Ok(None);
+            return self.next().await;
         }
 
         let mut final_results = Vec::new();
@@ -101,11 +74,6 @@ where
     }
 
     async fn close(&mut self) -> StreamResult<()> {
-        let inner = Arc::clone(&self.inner);
-        unsafe {
-            // Safe because we have exclusive access through &mut self
-            let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
-            source.close().await
-        }
+        self.base.close_inner().await
     }
 }

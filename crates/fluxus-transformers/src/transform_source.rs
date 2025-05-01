@@ -3,26 +3,24 @@ use fluxus_sources::Source;
 use fluxus_utils::models::{Record, StreamResult};
 use std::sync::Arc;
 
-use crate::{InnerOperator, InnerSource};
+use crate::{InnerOperator, InnerSource, TransformBase};
 
 #[derive(Clone)]
 pub struct TransformSource<T: Clone> {
-    inner: Arc<InnerSource<T>>,
-    operators: Vec<Arc<InnerOperator<T, T>>>,
+    base: TransformBase<T>,
     buffer: Vec<Record<T>>,
 }
 
 impl<T: Clone + Send + Sync + 'static> TransformSource<T> {
     pub fn new(inner: Arc<InnerSource<T>>) -> Self {
         Self {
-            inner,
-            operators: Vec::new(),
+            base: TransformBase::new(inner),
             buffer: Vec::new(),
         }
     }
 
     pub fn set_operators(&mut self, operators: Vec<Arc<InnerOperator<T, T>>>) {
-        self.operators = operators;
+        self.base.set_operators(operators);
     }
 }
 
@@ -38,40 +36,17 @@ impl<T: Clone + Send + Sync + 'static> Source<T> for TransformSource<T> {
             return Ok(self.buffer.pop());
         }
 
-        let inner = Arc::clone(&self.inner);
-        let record = unsafe {
-            // Safe because we have exclusive access through &mut self
-            let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
-            source.next().await?
-        };
+        let record = self.base.get_next_record().await?;
 
         // If there's no next record, return None
         let Some(record) = record else {
             return Ok(None);
         };
 
-        let mut records = vec![record];
+        let records = self.base.process_operators(record).await?;
 
-        for op in &self.operators {
-            // Process each record through the current operator and collect all results
-            let mut processed = Vec::new();
-
-            for rec in records {
-                let operator = Arc::clone(op);
-                let results = unsafe {
-                    // Safe because we have exclusive access through &mut self
-                    let op = &mut *(Arc::as_ptr(&operator) as *mut InnerOperator<T, T>);
-                    op.process(rec).await?
-                };
-
-                processed.extend(results);
-            }
-
-            if processed.is_empty() {
-                return self.next().await;
-            }
-
-            records = processed;
+        if records.is_empty() {
+            return self.next().await;
         }
 
         self.buffer = records;
@@ -81,11 +56,6 @@ impl<T: Clone + Send + Sync + 'static> Source<T> for TransformSource<T> {
     }
 
     async fn close(&mut self) -> StreamResult<()> {
-        let inner = Arc::clone(&self.inner);
-        unsafe {
-            // Safe because we have exclusive access through &mut self
-            let source = &mut *(Arc::as_ptr(&inner) as *mut InnerSource<T>);
-            source.close().await
-        }
+        self.base.close_inner().await
     }
 }
