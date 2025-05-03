@@ -11,6 +11,9 @@ categories.workspace = true
 keywords.workspace = true
 readme = "README.md"
 
+[features]
+gharchive = ["dep:chrono", "dep:async-compression", "dep:url", "dep:reqwest", "dep:tokio-util"]
+
 [dependencies]
 fluxus-utils = { path = "../fluxus-utils", version="0.1" }
 
@@ -25,5 +28,12 @@ tracing = "0.1"
 num_cpus = "1.16"
 csv = "1.3"
 
+tokio-util = { version = "0.7.15", optional = true } 
+chrono = { version = "0.4", features = ["serde"],  optional = true }
+async-compression = { version = "0.4.23", features = ["all"], optional = true }
+url = { version = "2.5.4", optional = true }
+reqwest = { version = "0.12.15", features = ["stream"] , optional = true}
+
 [dev-dependencies]
 cargo-husky = { version = "1", features = ["precommit-hook", "run-cargo-test", "run-cargo-clippy", "run-cargo-fmt"] }
+tempfile = "3"
