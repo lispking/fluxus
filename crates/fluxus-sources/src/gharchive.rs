@@ -64,7 +64,7 @@ impl GithubArchiveSource {
         Some(Self {
             uri,
             reader: None,
-            io_timeout: Some(Duration::from_secs(100)),
+            io_timeout: Some(Duration::from_secs(10)),
         })
     }
 
