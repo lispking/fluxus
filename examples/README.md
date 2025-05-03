@@ -81,6 +81,16 @@ Demonstrates stock market data processing:
 cargo run --example stock-market
 ```
 
+### 7. GitHub archive Analysis (`github-archive`)
+
+Demonstrates GitHub archive data processing:
+- Processes GitHub archive data from http resource
+- Counts the number of each event type in time windows
+
+```bash
+cargo run --features gharchive  --example github-archive
+```
+
 ## Example Structure
 
 Each example follows a similar pattern:
@@ -101,3 +111,4 @@ We recommend going through the examples in this order:
 5. IoT Devices - Multiple data sources
 6. Log Anomaly - Custom windows
 7. Stock Market - Real-time monitoring
+8. GitHub Archive - Count event type from GitHub archive file
