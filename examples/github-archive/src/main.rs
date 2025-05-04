@@ -23,11 +23,13 @@ async fn main() {
 async fn run_from_date() {
     let mut gh_source_gzip = gharchive::GithubArchiveSource::from_date("2025-05-04")
         .expect("Failed to create source from date");
-    
-    gh_source_gzip.set_end_date("2025-05-04").expect("Invalid end date");
-    
+
+    gh_source_gzip
+        .set_end_date("2025-05-04")
+        .expect("Invalid end date");
+
     gh_source_gzip.init().await.expect("init failed");
-    
+
     process_stream(gh_source_gzip).await;
 }
 
