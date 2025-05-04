@@ -11,6 +11,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 use tokio::fs::File;
 use tokio::io::{AsyncBufReadExt, BufReader};
+use tokio_util::io::StreamReader;
 use url::Url;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -91,16 +92,17 @@ impl GithubArchiveSource {
 impl GithubArchiveSource {
     async fn init_file(&mut self) -> StreamResult<()> {
         let file = File::open(self.uri.path()).await?;
-        if self.uri.path().ends_with(".gz") {
+        self.reader = Some(if self.uri.path().ends_with(".gz") {
             let buf_reader = BufReader::new(file);
             let decompressed = BufReader::new(GzipDecoder::new(buf_reader));
-            self.reader = Some(Box::new(decompressed));
+            Box::new(decompressed)
         } else {
-            self.reader = Some(Box::new(BufReader::new(file)));
-        }
+            Box::new(BufReader::new(file))
+        });
 
         Ok(())
     }
+
     async fn init_http(&mut self) -> StreamResult<()> {
         let client = reqwest::Client::builder()
             .timeout(self.io_timeout.unwrap_or(Duration::from_secs(10)))
@@ -118,54 +120,46 @@ impl GithubArchiveSource {
             ))
         })?;
 
-        let mut is_gzip = false;
-        if let Some(content_type) = response.headers().get(reqwest::header::CONTENT_TYPE) {
-            if "application/gzip" == content_type {
-                is_gzip = true;
-            }
-        }
-
-        if response.status().is_success() {
-            let async_read = response
-                .bytes_stream()
-                .map_err(|e| futures::io::Error::new(futures::io::ErrorKind::Other, e));
-
-            if is_gzip {
-                let gzip_decoder = GzipDecoder::new(BufReader::new(
-                    tokio_util::io::StreamReader::new(async_read),
-                ));
-                self.reader = Some(Box::new(BufReader::new(gzip_decoder)));
-            } else {
-                self.reader = Some(Box::new(BufReader::new(tokio_util::io::StreamReader::new(
-                    async_read,
-                ))));
-            }
-            Ok(())
-        } else {
-            Err(StreamError::Io(Error::new(
+        if !response.status().is_success() {
+            return Err(StreamError::Io(Error::new(
                 ErrorKind::Other,
                 format!(
                     "gharchive request failed, http status is {}",
                     response.status()
                 ),
-            )))
+            )));
         }
+
+        let is_gzip = response
+            .headers()
+            .get(reqwest::header::CONTENT_TYPE)
+            .map_or(false, |content_type| content_type == "application/gzip");
+
+        let async_read = response
+            .bytes_stream()
+            .map_err(|e| futures::io::Error::new(futures::io::ErrorKind::Other, e));
+
+        let stream_reader = StreamReader::new(async_read);
+        self.reader = Some(Box::new(BufReader::new(if is_gzip {
+            Box::new(GzipDecoder::new(BufReader::new(stream_reader)))
+                as Box<dyn tokio::io::AsyncRead + Unpin + Send + Sync>
+        } else {
+            Box::new(stream_reader) as Box<dyn tokio::io::AsyncRead + Unpin + Send + Sync>
+        })));
+        Ok(())
     }
 }
 
 #[async_trait]
 impl Source<Event> for GithubArchiveSource {
     async fn init(&mut self) -> StreamResult<()> {
-        let scheme = self.uri.scheme();
-        if scheme == "http" || scheme == "https" {
-            self.init_http().await
-        } else if scheme == "file" {
-            self.init_file().await
-        } else {
-            Err(StreamError::Io(Error::new(
+        match self.uri.scheme() {
+            "http" | "https" => self.init_http().await,
+            "file" => self.init_file().await,
+            _ => Err(StreamError::Io(Error::new(
                 ErrorKind::Other,
                 "not support scheme",
-            )))
+            ))),
         }
     }
 

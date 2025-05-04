@@ -30,7 +30,7 @@ async fn main() {
         .await
         .expect("handle error");
 
-    for result in sink.get_data() {
+    if let Some(result) = sink.get_last_element() {
         let mut events: Vec<_> = result.iter().collect();
         println!("\nWindow results:");
         events.sort_by(|a, b| b.1.cmp(a.1).then(a.0.cmp(b.0)));

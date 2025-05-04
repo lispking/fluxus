@@ -1,13 +1,10 @@
 #[cfg(test)]
 mod tests {
-    use std::io::Write;
     #[cfg(feature = "gharchive")]
     use {
         fluxus_sources::{Source, gharchive},
         tokio::test,
     };
-
-    use tempfile::NamedTempFile;
 
     #[cfg(feature = "gharchive")]
     #[test]
