@@ -1,6 +1,7 @@
 use super::Source;
 use async_compression::tokio::bufread::GzipDecoder;
 use async_trait::async_trait;
+use chrono::{NaiveDate, Utc};
 use fluxus_utils::models::{Record, StreamError, StreamResult};
 use futures::TryStreamExt;
 use futures::future::Either;
@@ -57,15 +58,77 @@ pub struct GithubArchiveSource {
     uri: Url,
     reader: Option<Box<dyn tokio::io::AsyncBufRead + Unpin + Send + Sync>>,
     io_timeout: Option<Duration>,
+    start_date: NaiveDate,
+    end_date: Option<NaiveDate>,
+    cur_date: NaiveDate,
+    cur_hour: u32,
 }
 
 impl GithubArchiveSource {
+    /// Create a new GithubArchiveSource with a specific GitHub Archive URL
     pub fn new<T: TryInto<Url>>(uri: T) -> Option<Self> {
         let uri = uri.try_into().ok()?;
         Some(Self {
             uri,
             reader: None,
             io_timeout: Some(Duration::from_secs(10)),
+            start_date: Utc::now().date_naive(),
+            end_date: None,
+            cur_date: Utc::now().date_naive(),
+            cur_hour: 0,
+        })
+    }
+
+    /// Create a new GithubArchiveSource with a given start date
+    /// The source will start processing from 00:00 of the specified date
+    ///
+    /// Date format should be YYYY-MM-DD
+    pub fn from_date(start_date: &str) -> StreamResult<Self> {
+        let start_date = NaiveDate::parse_from_str(start_date, "%Y-%m-%d")
+            .map_err(|e| StreamError::Config(format!("Invalid date format: {}", e)))?;
+
+        let fetch_url = format!("https://data.gharchive.org/{}-{}.json.gz", start_date, 0);
+        let uri = Url::parse(&fetch_url)
+            .map_err(|e| StreamError::Config(format!("Failed to construct URL: {}", e)))?;
+
+        Ok(Self {
+            uri,
+            reader: None,
+            io_timeout: Some(Duration::from_secs(10)),
+            start_date,
+            end_date: None,
+            cur_date: start_date,
+            cur_hour: 0,
+        })
+    }
+
+    /// Create a new GithubArchiveSource with a specific date and hour
+    /// Use this when you need precise control over the starting hour
+    ///
+    /// Date format should be YYYY-MM-DD
+    /// Hour must be between 0 and 23
+    pub fn from_hour(start_date: &str, hour: u32) -> StreamResult<Self> {
+        let start_date = NaiveDate::parse_from_str(start_date, "%Y-%m-%d")
+            .map_err(|e| StreamError::Config(format!("Invalid date format: {}", e)))?;
+
+        if hour > 23 {
+            return Err(StreamError::Config(
+                "Hour must be between 0 and 23".to_string(),
+            ));
+        }
+
+        let fetch_url = format!("https://data.gharchive.org/{}-{}.json.gz", start_date, hour);
+        let uri = Url::parse(&fetch_url)
+            .map_err(|e| StreamError::Config(format!("Failed to construct URL: {}", e)))?;
+
+        Ok(Self {
+            uri,
+            reader: None,
+            io_timeout: Some(Duration::from_secs(10)),
+            start_date,
+            end_date: None,
+            cur_date: start_date,
+            cur_hour: hour,
         })
     }
 
@@ -77,15 +140,67 @@ impl GithubArchiveSource {
             Url::from_file_path(std::env::current_dir().ok()?.join(path)).ok()
         };
 
+        let start_date = Utc::now().date_naive();
+
         uri_info.map(|uri| Self {
             uri,
             reader: None,
             io_timeout: None,
+            start_date,
+            end_date: None,
+            cur_date: start_date,
+            cur_hour: 0,
         })
     }
 
     pub fn set_io_timeout(&mut self, io_timeout: Duration) {
         self.io_timeout = Some(io_timeout);
+    }
+
+    /// Set the start date for data analysis
+    ///
+    /// Date format should be YYYY-MM-DD
+    pub fn set_start_date(&mut self, start_date: &str) -> StreamResult<()> {
+        self.start_date = NaiveDate::parse_from_str(start_date, "%Y-%m-%d")
+            .map_err(|e| StreamError::Config(format!("Invalid start date format: {}", e)))?;
+
+        self.cur_date = self.start_date;
+        self.cur_hour = 0;
+        Ok(())
+    }
+
+    /// Set the end date for data analysis (optional)
+    ///
+    /// Date format should be YYYY-MM-DD
+    pub fn set_end_date(&mut self, end_date: &str) -> StreamResult<()> {
+        let end_date = NaiveDate::parse_from_str(end_date, "%Y-%m-%d")
+            .map_err(|e| StreamError::Config(format!("Invalid end date format: {}", e)))?;
+
+        if end_date < self.start_date {
+            return Err(StreamError::Config(
+                "End date cannot be earlier than start date".to_string(),
+            ));
+        }
+
+        self.end_date = Some(end_date);
+        Ok(())
+    }
+
+    /// Create a URL for a specific date and hour
+    fn build_date_url(&self, date: NaiveDate, hour: u32) -> Url {
+        let date_str = date.format("%Y-%m-%d").to_string();
+        let url_str = format!("https://data.gharchive.org/{}-{}.json.gz", date_str, hour);
+        Url::parse(&url_str).expect("Failed to construct URL")
+    }
+
+    /// Check if we have reached the end date
+    fn is_past_end_date(&self) -> bool {
+        match self.end_date {
+            Some(end_date) => {
+                self.cur_date > end_date || (self.cur_date == end_date && self.cur_hour >= 23)
+            }
+            None => false,
+        }
     }
 }
 
@@ -148,6 +263,34 @@ impl GithubArchiveSource {
         })));
         Ok(())
     }
+
+    /// Advance to the next hour or day
+    async fn advance_next(&mut self) -> StreamResult<bool> {
+        self.reader = None;
+
+        self.cur_hour = match self.cur_hour {
+            hour if hour < 23 => hour + 1,
+            _ => {
+                self.cur_date = self.cur_date.succ_opt().unwrap();
+
+                if self.is_past_end_date() {
+                    return Ok(false);
+                }
+
+                0
+            }
+        };
+
+        self.uri = self.build_date_url(self.cur_date, self.cur_hour);
+
+        match self.init().await {
+            Ok(_) => Ok(true),
+            Err(e) => {
+                tracing::warn!("Failed to initialize next dataset: {}", e);
+                Box::pin(self.advance_next()).await
+            }
+        }
+    }
 }
 
 #[async_trait]
@@ -167,7 +310,8 @@ impl Source<Event> for GithubArchiveSource {
     archive file downloaded from https://data.gharchive.org/ must be split by CRLF
     */
     async fn next(&mut self) -> StreamResult<Option<Record<Event>>> {
-        self.reader
+        let result = self
+            .reader
             .as_mut()
             .map_or_else(
                 || Either::Left(async { Ok(None) }),
@@ -183,7 +327,20 @@ impl Source<Event> for GithubArchiveSource {
                     })
                 },
             )
-            .await
+            .await;
+
+        match result {
+            Ok(Some(record)) => Ok(Some(record)),
+            Ok(None) => {
+                let advanced = self.advance_next().await?;
+                if advanced {
+                    self.next().await
+                } else {
+                    Ok(None)
+                }
+            }
+            Err(e) => Err(e),
+        }
     }
 
     async fn close(&mut self) -> StreamResult<()> {

@@ -86,6 +86,7 @@ cargo run --example stock-market
 Demonstrates GitHub archive data processing:
 - Processes GitHub archive data from http resource
 - Counts the number of each event type in time windows
+- Supports date range processing with start and end dates
 
 ```bash
 cargo run --features gharchive  --example github-archive

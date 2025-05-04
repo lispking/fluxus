@@ -16,6 +16,25 @@ async fn main() {
     let mut gh_source_gzip = gharchive::GithubArchiveSource::new(uri).expect("new failed");
     gh_source_gzip.init().await.expect("init failed");
 
+    process_stream(gh_source_gzip).await;
+}
+
+#[cfg(feature = "gharchive")]
+async fn run_from_date() {
+    let mut gh_source_gzip = gharchive::GithubArchiveSource::from_date("2025-05-04")
+        .expect("Failed to create source from date");
+
+    gh_source_gzip
+        .set_end_date("2025-05-04")
+        .expect("Invalid end date");
+
+    gh_source_gzip.init().await.expect("init failed");
+
+    process_stream(gh_source_gzip).await;
+}
+
+#[cfg(feature = "gharchive")]
+async fn process_stream(gh_source_gzip: gharchive::GithubArchiveSource) {
     pub type EventTypeCount = HashMap<String, u32>;
 
     let sink: CollectionSink<EventTypeCount> = CollectionSink::new();

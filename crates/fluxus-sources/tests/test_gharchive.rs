@@ -3,12 +3,15 @@ mod tests {
     #[cfg(feature = "gharchive")]
     use {
         fluxus_sources::{Source, gharchive},
+        std::io::Write,
         tokio::test,
     };
 
     #[cfg(feature = "gharchive")]
     #[test]
     async fn test_local_source() {
+        use tempfile::NamedTempFile;
+
         let url = "https://data.gharchive.org/2012-01-01-15.json.gz";
         let response = reqwest::get(url).await.unwrap();
 
@@ -78,5 +81,45 @@ mod tests {
                 break;
             }
         }
+    }
+
+    #[cfg(feature = "gharchive")]
+    #[test]
+    async fn test_date_range() {
+        let mut source = gharchive::GithubArchiveSource::from_date("2021-01-01").unwrap();
+
+        source.set_end_date("2021-01-01").unwrap();
+        source.set_io_timeout(std::time::Duration::from_secs(20));
+
+        source.init().await.unwrap();
+
+        let mut record_count = 0;
+        let max_records = 200000;
+
+        loop {
+            match source.next().await {
+                Ok(Some(_record)) => {
+                    record_count += 1;
+                    if record_count >= max_records {
+                        break;
+                    }
+                }
+                Ok(None) => {
+                    println!("Reached end of date range as expected");
+                    break;
+                }
+                Err(e) => {
+                    assert!(false, "Error during processing: {:?}", e);
+                    break;
+                }
+            }
+        }
+
+        assert!(
+            record_count == max_records,
+            "Processed {} records from date range, expected {}",
+            record_count,
+            max_records
+        );
     }
 }
