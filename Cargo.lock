@@ -1495,6 +1495,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "remote_csv"
+version = "0.1.0"
+dependencies = [
+ "fluxus-sources",
+ "tokio",
+]
+
+[[package]]
 name = "reqwest"
 version = "0.12.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"

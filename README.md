@@ -71,6 +71,14 @@ Processing network logs with sliding windows and aggregations.
 cargo run --example network-log
 ```
 
+### Remote CSV Data Processing
+
+Processing CSV data from remote sources like GitHub.
+
+```bash
+cargo run --example remote-csv
+```
+
 ### View Available Examples
 
 To see all available examples and options:
