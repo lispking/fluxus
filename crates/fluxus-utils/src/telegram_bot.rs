@@ -51,10 +51,10 @@ impl TelegramBot {
         message: String,
     ) -> Result<(), anyhow::Error> {
         let recipient = if recipient.starts_with('@') {
-            // 频道用户名
+            // channel username
             Recipient::ChannelUsername(recipient.to_string())
         } else {
-            // 尝试解析为聊天 ID
+            // try to parse as chat id
             match recipient.parse::<i64>() {
                 Ok(id) => Recipient::Id(ChatId(id)),
                 Err(_) => return Err(anyhow::anyhow!("Invalid recipient format")),
