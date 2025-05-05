@@ -1,28 +1,12 @@
 use reqwest::Proxy;
 use teloxide::{prelude::*, types::Recipient};
 
+#[derive(Default, Clone)]
 pub struct TelegramBot {
     bot: Option<Bot>,
     notice_id: String,
 }
 
-impl Default for TelegramBot {
-    fn default() -> Self {
-        Self {
-            bot: None,
-            notice_id: "".to_string(),
-        }
-    }
-}
-
-impl Clone for TelegramBot {
-    fn clone(&self) -> Self {
-        Self {
-            bot: self.bot.clone(),
-            notice_id: self.notice_id.clone(),
-        }
-    }
-}
 impl TelegramBot {
     pub fn new(token: String, notice_id: String, proxy: Option<String>) -> Self {
         let client_builder = reqwest::Client::builder();
