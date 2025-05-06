@@ -2,6 +2,7 @@ pub mod buffered;
 pub mod console;
 pub mod dummy_sink;
 pub mod file;
+pub mod telegram;
 
 pub use buffered::BufferedSink;
 pub use console::ConsoleSink;
