@@ -45,3 +45,31 @@ fn test_windowed_limit() {
         );
     })
 }
+
+#[test]
+fn test_tail() {
+    tokio_test::block_on(async {
+        let numbers = vec![1, 2, 3, 4, 5, 6];
+        let source = CollectionSource::new(numbers);
+        let sink = CollectionSink::new();
+        DataStream::new(source)
+            .window(fluxus_utils::window::WindowConfig::global())
+            .tail(3)
+            .sink(sink.clone())
+            .await
+            .unwrap();
+
+        let data = sink.get_data();
+        assert_eq!(
+            data,
+            vec![
+                vec![1],
+                vec![1, 2],
+                vec![1, 2, 3],
+                vec![2, 3, 4],
+                vec![3, 4, 5],
+                vec![4, 5, 6],
+            ]
+        );
+    })
+}
