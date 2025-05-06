@@ -25,15 +25,11 @@ impl TelegramBot {
         }
     }
 
-    pub async fn send_message(&self, message: String) -> Result<(), anyhow::Error> {
+    pub async fn send_message(&self, message: String) -> anyhow::Result<()> {
         self.send_message_to(&self.notice_id, message).await
     }
 
-    pub async fn send_message_to(
-        &self,
-        recipient: &str,
-        message: String,
-    ) -> Result<(), anyhow::Error> {
+    pub async fn send_message_to(&self, recipient: &str, message: String) -> anyhow::Result<()> {
         let recipient = if recipient.starts_with('@') {
             // channel username
             Recipient::ChannelUsername(recipient.to_string())
@@ -44,11 +40,12 @@ impl TelegramBot {
                 Err(_) => return Err(anyhow::anyhow!("Invalid recipient format")),
             }
         };
-        self.bot
-            .as_ref()
-            .unwrap()
-            .send_message(recipient, message)
-            .await?;
+
+        if let Some(bot) = self.bot.as_ref() {
+            bot.send_message(recipient, message).await?;
+        } else {
+            return Err(anyhow::anyhow!("Bot not initialized"));
+        }
         Ok(())
     }
 
