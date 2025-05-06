@@ -55,7 +55,7 @@ where
             .send_message(message)
             .await
             .map_err(|e| StreamError::Runtime(format!("Failed to send message: {}", e)))?;
-        return Ok(());
+        Ok(())
     }
 
     async fn flush(&mut self) -> StreamResult<()> {
