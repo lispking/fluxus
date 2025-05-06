@@ -8,21 +8,23 @@ pub struct TelegramBot {
 }
 
 impl TelegramBot {
-    pub fn new(token: String, notice_id: String, proxy: Option<String>) -> Self {
+    pub fn new(token: String, notice_id: String, proxy: Option<String>) -> anyhow::Result<Self> {
         let client_builder = reqwest::Client::builder();
+
         let client = if let Some(proxy_url) = proxy {
-            client_builder
-                .proxy(Proxy::https(&proxy_url).unwrap())
-                .build()
-                .unwrap()
+            match Proxy::https(&proxy_url) {
+                Ok(proxy) => client_builder.proxy(proxy).build()?,
+                Err(_) => return Err(anyhow::anyhow!("Invalid proxy URL")),
+            }
         } else {
-            client_builder.build().unwrap()
+            client_builder.build()?
         };
+
         let bot = Bot::with_client(token, client);
-        Self {
+        Ok(Self {
             bot: Some(bot),
             notice_id,
-        }
+        })
     }
 
     pub async fn send_message(&self, message: String) -> anyhow::Result<()> {

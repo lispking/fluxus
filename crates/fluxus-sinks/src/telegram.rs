@@ -14,12 +14,12 @@ pub struct TelegramSink<T, F = DefaultFormatter> {
 
 impl<T> TelegramSink<T, DefaultFormatter> {
     /// Create a new console sink with default formatter
-    pub fn new(token: String, recipient: String, proxy: Option<String>) -> Self {
-        Self {
-            bot: TelegramBot::new(token, recipient, proxy),
+    pub fn new(token: String, recipient: String, proxy: Option<String>) -> anyhow::Result<Self> {
+        Ok(Self {
+            bot: TelegramBot::new(token, recipient, proxy)?,
             formatter: DefaultFormatter,
             _phantom: PhantomData,
-        }
+        })
     }
 }
 
