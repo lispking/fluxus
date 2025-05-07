@@ -1,5 +1,6 @@
-use std::time::{SystemTime, UNIX_EPOCH};
 use thiserror::Error;
+
+use crate::time::current_time;
 
 /// Record represents a single data record in the stream
 #[derive(Debug, Clone)]
@@ -13,10 +14,7 @@ pub struct Record<T> {
 impl<T> Record<T> {
     /// Create a new record with the current timestamp
     pub fn new(data: T) -> Self {
-        let timestamp = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .expect("System time cannot be earlier than UNIX epoch")
-            .as_millis() as i64;
+        let timestamp = current_time() as i64;
         Record { data, timestamp }
     }
 

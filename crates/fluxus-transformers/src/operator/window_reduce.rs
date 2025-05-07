@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 use fluxus_utils::models::{Record, StreamResult};
+use fluxus_utils::time::current_time;
 use fluxus_utils::window::{WindowConfig, WindowType};
 use std::collections::HashMap;
 use std::marker::PhantomData;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 /// Built-in window reduce operator
 pub struct WindowReduceOperator<T, F>
@@ -77,10 +77,7 @@ where
 
     async fn on_window_trigger(&mut self) -> StreamResult<Vec<Record<T>>> {
         let mut results = Vec::new();
-        let now = SystemTime::now()
-            .duration_since(UNIX_EPOCH)
-            .expect("System time cannot be earlier than UNIX epoch")
-            .as_millis() as i64;
+        let now = current_time() as i64;
 
         // Process and remove expired windows
         let expired_keys: Vec<_> = self

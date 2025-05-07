@@ -1,10 +1,12 @@
 use anyhow::Result;
-use fluxus::api::{
-    DataStream,
-    io::{CollectionSink, CollectionSource},
-};
 use fluxus::utils::{models::Record, window::WindowConfig};
-use std::time::{SystemTime, UNIX_EPOCH};
+use fluxus::{
+    api::{
+        DataStream,
+        io::{CollectionSink, CollectionSource},
+    },
+    utils::time::current_time,
+};
 use std::{collections::HashMap, time::Duration};
 
 pub type EventCount = HashMap<(String, i64), usize>;
@@ -57,9 +59,6 @@ async fn main() -> Result<()> {
 
 // Helper function: Generate timestamp relative to current time
 fn get_timestamp(offset_ms: u64) -> i64 {
-    let now = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .expect("System time cannot be earlier than UNIX epoch")
-        .as_millis() as i64;
+    let now = current_time() as i64;
     now + offset_ms as i64
 }

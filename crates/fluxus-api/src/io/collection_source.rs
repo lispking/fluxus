@@ -1,8 +1,8 @@
 use async_trait::async_trait;
 use fluxus_sources::Source;
 use fluxus_utils::models::{Record, StreamResult};
+use fluxus_utils::time::current_time;
 use std::collections::VecDeque;
-use std::time::{SystemTime, UNIX_EPOCH};
 
 /// A source that produces elements from a collection
 pub struct CollectionSource<T> {
@@ -30,10 +30,7 @@ where
         let value = self.data.pop_front();
         Ok(value.map(|data| Record {
             data,
-            timestamp: SystemTime::now()
-                .duration_since(UNIX_EPOCH)
-                .unwrap_or_default()
-                .as_millis() as i64,
+            timestamp: current_time() as i64,
         }))
     }
 

@@ -13,9 +13,10 @@ use fluxus_sources::Source;
 use fluxus_transformers::operator::Operator;
 use fluxus_utils::models::Record;
 use fluxus_utils::models::StreamResult;
+use fluxus_utils::time::current_time;
 use fluxus_utils::window::WindowConfig;
 use std::sync::Arc;
-use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant};
 use tokio::runtime::Handle;
 use tokio::time;
 use tracing;
@@ -130,10 +131,7 @@ impl<T: 'static + Send + Clone> Pipeline<T> {
     /// Update watermark and trigger windows if needed
     async fn process_watermark(&mut self) -> StreamResult<()> {
         if let Some(window_config) = &self.window_config {
-            let now = SystemTime::now()
-                .duration_since(UNIX_EPOCH)
-                .expect("System time cannot be earlier than UNIX epoch")
-                .as_millis() as i64;
+            let now = current_time() as i64;
 
             // Check if we should advance the watermark
             if now - self.last_watermark >= window_config.watermark_delay.as_millis() as i64 {
