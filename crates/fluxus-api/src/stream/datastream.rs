@@ -1,4 +1,4 @@
-use crate::operators::{FilterOperator, MapOperator};
+use crate::operators::{FilterOperator, FlatMapOperator, MapOperator};
 use fluxus_core::ParallelConfig;
 use fluxus_sinks::Sink;
 use fluxus_sources::Source;
@@ -66,6 +66,16 @@ where
         self
     }
 
+    /// Apply a flat map transformation
+    pub fn flat_map<F, R, I>(self, f: F) -> DataStream<R>
+    where
+        F: Fn(T) -> I + Send + Sync + 'static,
+        R: Clone + Send + Sync + 'static,
+        I: IntoIterator<Item = R> + Send + Sync + 'static,
+    {
+        self.transform(FlatMapOperator::new(f))
+    }
+
     /// Apply a limit transformation that keeps the first n elements
     pub fn limit(self, n: usize) -> Self {
         let n = AtomicUsize::new(n);
@@ -115,5 +125,15 @@ where
 
         sink.flush().await?;
         sink.close().await
+    }
+}
+
+impl<T> DataStream<Vec<T>>
+where
+    T: Clone + Send + Sync + 'static,
+{
+    /// Flatten the stream
+    pub fn flatten(self) -> DataStream<T> {
+        self.transform(FlatMapOperator::new(|v| v))
     }
 }
