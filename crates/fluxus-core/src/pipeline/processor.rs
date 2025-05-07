@@ -132,7 +132,7 @@ impl<T: 'static + Send + Clone> Pipeline<T> {
         if let Some(window_config) = &self.window_config {
             let now = SystemTime::now()
                 .duration_since(UNIX_EPOCH)
-                .unwrap()
+                .expect("System time cannot be earlier than UNIX epoch")
                 .as_millis() as i64;
 
             // Check if we should advance the watermark

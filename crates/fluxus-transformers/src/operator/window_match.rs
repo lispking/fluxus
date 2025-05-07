@@ -34,13 +34,9 @@ where
     }
 
     fn process_window(&self, records: &[Record<T>]) -> Option<Record<bool>> {
-        if records.is_empty() {
-            return None;
-        }
-
-        Some(Record {
+        records.first().map(|first| Record {
             data: records.iter().any(|record| (self.func)(&record.data)),
-            timestamp: records.first().unwrap().timestamp,
+            timestamp: first.timestamp,
         })
     }
 }
@@ -99,13 +95,10 @@ where
     }
 
     fn process_window(&self, records: &[Record<T>]) -> Option<Record<bool>> {
-        if records.is_empty() {
-            return None;
-        }
-
-        Some(Record {
+        // 由于前面已经检查了records不为空，这里可以安全地使用first()
+        records.first().map(|first| Record {
             data: records.iter().all(|record| (self.func)(&record.data)),
-            timestamp: records.first().unwrap().timestamp,
+            timestamp: first.timestamp,
         })
     }
 }

@@ -163,7 +163,7 @@ fn rand_float() -> f64 {
     use std::time::SystemTime;
     let nanos = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
-        .unwrap()
+        .expect("System time cannot be earlier than UNIX epoch")
         .subsec_nanos() as f64;
     (nanos % 1000.0) / 1000.0
 }

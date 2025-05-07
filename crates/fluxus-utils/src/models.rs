@@ -15,7 +15,7 @@ impl<T> Record<T> {
     pub fn new(data: T) -> Self {
         let timestamp = SystemTime::now()
             .duration_since(UNIX_EPOCH)
-            .unwrap()
+            .expect("System time cannot be earlier than UNIX epoch")
             .as_millis() as i64;
         Record { data, timestamp }
     }

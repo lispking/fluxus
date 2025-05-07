@@ -59,7 +59,7 @@ async fn main() -> Result<()> {
 fn get_timestamp(offset_ms: u64) -> i64 {
     let now = SystemTime::now()
         .duration_since(UNIX_EPOCH)
-        .unwrap()
+        .expect("System time cannot be earlier than UNIX epoch")
         .as_millis() as i64;
     now + offset_ms as i64
 }

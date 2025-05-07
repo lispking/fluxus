@@ -36,19 +36,14 @@ where
     }
 
     fn process_window(&self, records: &[Record<T>]) -> Option<Record<T>> {
-        if records.is_empty() {
-            return None;
-        }
-
-        let mut iter = records.iter();
-        let first = iter.next().unwrap();
-        let result = iter.fold(first.data.clone(), |acc, record| {
-            (self.func)(acc, record.data.clone())
-        });
-
-        Some(Record {
-            data: result,
-            timestamp: first.timestamp,
+        records.first().map(|first| {
+            let result = records[1..].iter().fold(first.data.clone(), |acc, record| {
+                (self.func)(acc, record.data.clone())
+            });
+            Record {
+                data: result,
+                timestamp: first.timestamp,
+            }
         })
     }
 }
@@ -84,7 +79,7 @@ where
         let mut results = Vec::new();
         let now = SystemTime::now()
             .duration_since(UNIX_EPOCH)
-            .unwrap()
+            .expect("System time cannot be earlier than UNIX epoch")
             .as_millis() as i64;
 
         // Process and remove expired windows
