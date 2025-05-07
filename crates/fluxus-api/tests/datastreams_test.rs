@@ -73,3 +73,39 @@ fn test_tail() {
         );
     })
 }
+
+#[test]
+fn test_flatten() {
+    tokio_test::block_on(async {
+        let numbers: Vec<Vec<i32>> = vec![vec![1, 2], vec![3, 4, 5]];
+        let source = CollectionSource::new(numbers);
+        let sink = CollectionSink::new();
+
+        DataStream::new(source)
+            .flatten()
+            .sink(sink.clone())
+            .await
+            .unwrap();
+
+        let data = sink.get_data();
+        assert_eq!(data, vec![1, 2, 3, 4, 5]);
+    })
+}
+
+#[test]
+fn test_flat_map() {
+    tokio_test::block_on(async {
+        let numbers: Vec<usize> = vec![1, 2, 3];
+        let source = CollectionSource::new(numbers);
+        let sink = CollectionSink::new();
+
+        DataStream::new(source)
+            .flat_map(|v| vec![v; v])
+            .sink(sink.clone())
+            .await
+            .unwrap();
+
+        let data = sink.get_data();
+        assert_eq!(data, vec![1, 2, 2, 3, 3, 3]);
+    })
+}

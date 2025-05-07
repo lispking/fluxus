@@ -14,6 +14,7 @@ where
 {
     base: TransformBase<T>,
     operator: Arc<InnerOperator<T, R>>,
+    buffer: Vec<Record<R>>,
 }
 
 impl<T, R> TransformSourceWithOperator<T, R>
@@ -34,6 +35,7 @@ where
         Self {
             base,
             operator: Arc::new(operator),
+            buffer: Vec::new(),
         }
     }
 }
@@ -49,6 +51,9 @@ where
     }
 
     async fn next(&mut self) -> StreamResult<Option<Record<R>>> {
+        if !self.buffer.is_empty() {
+            return Ok(self.buffer.pop());
+        }
         let record = self.base.get_next_record().await?;
 
         // If there's no next record, return None
@@ -69,8 +74,10 @@ where
                 op.process(rec).await?
             });
         }
+        self.buffer = final_results;
+        self.buffer.reverse();
 
-        Ok(final_results.into_iter().next())
+        Ok(self.buffer.pop())
     }
 
     async fn close(&mut self) -> StreamResult<()> {
