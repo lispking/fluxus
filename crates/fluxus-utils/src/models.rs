@@ -38,6 +38,12 @@ pub enum StreamError {
 
     #[error("Runtime error: {0}")]
     Runtime(String),
+
+    #[error("EOF")]
+    EOF,
+
+    #[error("Wait for {0} milliseconds")]
+    Wait(u64),
 }
 
 /// A Result type specialized for stream processing operations
