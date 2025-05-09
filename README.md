@@ -130,3 +130,21 @@ cargo test
 ## License
 
 This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## Star History
+
+<a href="https://star-history.com/#lispking/fluxus&Date">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=lispking/fluxus&type=Date&theme=dark" />
+    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=lispking/fluxus&type=Date" />
+    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=lispking/fluxus&type=Date" />
+  </picture>
+</a>
+
+### Thank you for your support and participation ❤️
+
+<div align="center">
+  <a href="https://github.com/lispking/fluxus/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=lispking/fluxus" width="100%" />
+  </a>
+</div>
