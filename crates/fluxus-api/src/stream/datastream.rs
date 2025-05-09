@@ -5,7 +5,10 @@ use fluxus_sources::Source;
 use fluxus_transformers::{
     InnerOperator, InnerSource, Operator, TransformSource, TransformSourceWithOperator,
 };
-use fluxus_utils::{models::StreamResult, window::WindowConfig};
+use fluxus_utils::{
+    models::{StreamError, StreamResult},
+    window::WindowConfig,
+};
 use std::sync::{
     Arc,
     atomic::{AtomicUsize, Ordering},
@@ -119,8 +122,18 @@ where
         let mut source = TransformSource::new(self.source);
         source.set_operators(self.operators);
 
-        while let Some(record) = source.next().await? {
-            sink.write(record).await?;
+        loop {
+            match source.next().await {
+                Ok(Some(record)) => sink.write(record).await?,
+                Ok(None) => break,
+                Err(e) => match e {
+                    StreamError::EOF => break,
+                    StreamError::Wait(ms) => {
+                        tokio::time::sleep(std::time::Duration::from_millis(ms)).await
+                    }
+                    _ => return Err(e),
+                },
+            }
         }
 
         sink.flush().await?;
