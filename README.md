@@ -133,13 +133,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## Star History
 
-<a href="https://star-history.com/#lispking/fluxus&Date">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=lispking/fluxus&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=lispking/fluxus&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=lispking/fluxus&type=Date" />
-  </picture>
-</a>
+[![Star History Chart](https://api.star-history.com/svg?repos=lispking/fluxus&type=Date)](https://www.star-history.com/#lispking/fluxus&Date)
 
 ### Thank you for your support and participation ❤️
 
