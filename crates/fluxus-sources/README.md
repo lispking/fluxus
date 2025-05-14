@@ -16,5 +16,5 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fluxus-sources = "0.1"
+fluxus-sources = "0.2"
 ```

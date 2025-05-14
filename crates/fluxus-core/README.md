@@ -41,7 +41,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fluxus-core = "0.1"
+fluxus-core = "0.2"
 ```
 
 This crate is usually not used directly but through the `fluxus-api` crate.

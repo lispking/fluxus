@@ -1,7 +1,11 @@
 [package]
 name = "remote_csv"
+description = "Example of a remote CSV source"
+publish = false
 version = "0.1.0"
 edition = "2024"
+license = "Apache-2.0"
+readme = "./README.md"
 
 [dependencies]
 fluxus-sources = { path = "../../crates/fluxus-sources" }
