@@ -18,5 +18,5 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fluxus-sinks = "0.1"
+fluxus-sinks = "0.2"
 ```

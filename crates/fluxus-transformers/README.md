@@ -16,5 +16,5 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-fluxus-transformers = "0.1"
+fluxus-transformers = "0.2"
 ```
