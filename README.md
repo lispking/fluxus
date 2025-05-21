@@ -8,6 +8,7 @@
 [![Documentation](https://docs.rs/fluxus-core/badge.svg)](https://docs.rs/fluxus-core)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache2.0-yellow.svg)](https://opensource.org/license/apache-2-0)
 [<img alt="build status" src="https://img.shields.io/github/actions/workflow/status/lispking/fluxus/ci.yml?branch=main&style=for-the-badge" height="20">](https://github.com/lispking/fluxus/actions?query=branch%3Amain)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/lispking/fluxus)
 
 
 Fluxus is a lightweight stream processing engine written in Rust, designed for efficient real-time data processing and analysis.
