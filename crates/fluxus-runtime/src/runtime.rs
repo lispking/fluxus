@@ -89,7 +89,9 @@ impl RuntimeContext {
                 }
             }
             let mut source_guard = source.lock().await;
-            let _ = source_guard.close().await;
+            if let Err(e) = source_guard.close().await {
+                tracing::error!("Error closing source: {:?}", e);
+            }
         })
     }
 
@@ -148,11 +150,19 @@ impl RuntimeContext {
         tokio::spawn(async move {
             while let Some(record) = rx.recv().await {
                 let mut sink_guard = sink.lock().await;
-                let _ = sink_guard.write(record).await;
+                if let Err(e) = sink_guard.write(record).await {
+                    tracing::error!("Error writing to sink: {:?}", e);
+                }
             }
+
             let mut sink_guard = sink.lock().await;
-            let _ = sink_guard.flush().await;
-            let _ = sink_guard.close().await;
+            if let Err(e) = sink_guard.flush().await {
+                tracing::error!("Error flushing sink: {:?}", e);
+            }
+
+            if let Err(e) = sink_guard.close().await {
+                tracing::error!("Error closing sink: {:?}", e);
+            }
         })
     }
 }
