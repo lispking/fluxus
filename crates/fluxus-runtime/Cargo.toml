@@ -23,3 +23,11 @@ parking_lot = "0.12"
 dashmap = "5.5"
 bytes = "1.5"
 uuid = { version = "1.7", features = ["v4"] }
+
+[dev-dependencies]
+criterion = "0.6"
+
+[[bench]]
+name = "runtime_benchmark"
+path = "../../benches/runtime_benchmark.rs"
+harness = false
