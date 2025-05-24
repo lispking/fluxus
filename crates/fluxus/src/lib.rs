@@ -6,9 +6,8 @@
 //!
 //! ## Add Dependencies
 //! To use Fluxus, you need to add the following dependencies to your `Cargo.toml`:
-//! ```toml
-//! [dependencies]
-//! fluxus = { version = "1", features = ["full"] }
+//! ```shell
+//! cargo add fluxus --features full
 //! ```
 //!
 //! ## Word Count Example

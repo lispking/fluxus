@@ -88,6 +88,16 @@ To see all available examples and options:
 cargo run --example
 ```
 
+## Using Fluxus in Your Project
+
+To use Fluxus in your project, add it as a dependency using cargo:
+
+```bash
+cargo add fluxus --features full
+```
+
+This will add Fluxus with all available features to your project. After adding the dependency, you can start using Fluxus in your code. Check out the examples section below for usage examples.
+
 ## Getting Started
 
 1. Clone the repository:
