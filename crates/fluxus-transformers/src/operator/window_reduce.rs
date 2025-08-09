@@ -106,10 +106,10 @@ where
             .collect();
 
         for key in expired_keys {
-            if let Some(records) = self.buffer.remove(&key) {
-                if let Some(result) = self.process_window(&records) {
-                    results.push(result);
-                }
+            if let Some(records) = self.buffer.remove(&key)
+                && let Some(result) = self.process_window(&records)
+            {
+                results.push(result);
             }
         }
 
