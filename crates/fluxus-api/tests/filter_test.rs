@@ -17,7 +17,7 @@ mod tests {
                 .unwrap();
 
             let data = sink.get_data();
-            println!("data: {:?}", data);
+            println!("data: {data:?}");
             assert_eq!(data.len(), 2);
             assert_eq!(data[0], 2);
             assert_eq!(data[1], 4);

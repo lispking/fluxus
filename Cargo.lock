@@ -2141,6 +2141,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "user-behavior"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "fluxus",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "utf16_iter"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"

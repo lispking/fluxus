@@ -19,11 +19,11 @@ mod tests {
                 .await
                 .unwrap();
             let data = sink.get_data();
-            assert_eq!(data[0], false);
-            assert_eq!(data[1], true);
-            assert_eq!(data[2], true);
-            assert_eq!(data[3], true);
-            assert_eq!(data[4], true);
+            assert!(!data[0]);
+            assert!(data[1]);
+            assert!(data[2]);
+            assert!(data[3]);
+            assert!(data[4]);
         })
     }
 
@@ -39,11 +39,11 @@ mod tests {
                 .await
                 .unwrap();
             let data = sink.get_data();
-            assert_eq!(data[0], false);
-            assert_eq!(data[1], false);
-            assert_eq!(data[2], false);
-            assert_eq!(data[3], false);
-            assert_eq!(data[4], false);
+            assert!(!data[0]);
+            assert!(!data[1]);
+            assert!(!data[2]);
+            assert!(!data[3]);
+            assert!(!data[4]);
         })
     }
 

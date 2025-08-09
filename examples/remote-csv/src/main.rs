@@ -4,7 +4,7 @@ use fluxus_sources::{CsvSource, Source};
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let url = "https://gist.githubusercontent.com/netj/8836201/raw/6f9306ad21398ea43cba4f7d537619d0e07d5ae3/iris.csv";
 
-    println!("Reading CSV data from: {}", url);
+    println!("Reading CSV data from: {url}");
 
     let mut source = CsvSource::from_url(url);
 

@@ -47,7 +47,7 @@ impl Source<String> for CsvSource {
             CsvSourceType::LocalFile(path) => {
                 let file = File::open(path)
                     .await
-                    .map_err(|e| StreamError::Io(Error::other(format!("{}", e))))?;
+                    .map_err(|e| StreamError::Io(Error::other(format!("{e}"))))?;
                 self.reader = Some(Box::new(BufReader::new(file)));
             }
             CsvSourceType::RemoteUrl(url) => {
@@ -56,7 +56,7 @@ impl Source<String> for CsvSource {
                     .build()
                     .map_err(|_e| StreamError::Io(io::Error::other("create http client error")))?;
                 let response = client.get(url).send().await.map_err(|e| {
-                    StreamError::Io(Error::other(format!("Failed to fetch URL: {}", e)))
+                    StreamError::Io(Error::other(format!("Failed to fetch URL: {e}")))
                 })?;
 
                 if !response.status().is_success() {
@@ -68,7 +68,7 @@ impl Source<String> for CsvSource {
 
                 let byte_stream = response
                     .bytes_stream()
-                    .map_err(|e| Error::other(format!("{}", e)));
+                    .map_err(|e| Error::other(format!("{e}")));
 
                 let reader = StreamReader::new(byte_stream);
                 self.reader = Some(Box::new(BufReader::new(reader)));

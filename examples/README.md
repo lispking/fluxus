@@ -81,6 +81,18 @@ Demonstrates stock market data processing:
 cargo run --example stock-market
 ```
 
+### 8. User Behavior Analysis (`user-behavior`)
+
+Demonstrates comprehensive user behavior analysis for web analytics:
+- Tracks user sessions and journeys across multiple pages
+- Calculates engagement metrics (page views, clicks, scrolls)
+- Analyzes bounce rates and session durations
+- Supports multi-device user behavior tracking
+
+```bash
+cargo run --example user-behavior
+```
+
 ## Example Structure
 
 Each example follows a similar pattern:
@@ -101,4 +113,5 @@ We recommend going through the examples in this order:
 5. IoT Devices - Multiple data sources
 6. Log Anomaly - Custom windows
 7. Stock Market - Real-time monitoring
-8. [GitHub Archive](https://github.com/fluxus-labs/fluxus-source-gharchive/tree/main/examples) - Count event type from GitHub archive file
+8. User Behavior - Session-based analytics
+9. [GitHub Archive](https://github.com/fluxus-labs/fluxus-source-gharchive/tree/main/examples) - Count event type from GitHub archive file

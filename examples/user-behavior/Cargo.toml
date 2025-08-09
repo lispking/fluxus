@@ -1,0 +1,21 @@
+[package]
+name = "user-behavior"
+description = "User behavior analysis example for Fluxus stream processing engine"
+publish = false
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+readme = "./README.md"
+
+[[example]]
+name = "user-behavior"
+path = "src/main.rs"
+
+[dependencies]
+fluxus = { path = "../../crates/fluxus", features = ["full"] }
+
+tokio = { version = "1", features = ["full"] }
+anyhow = "1.0"
+clap = { version = "4.0", features = ["derive"] }
+tracing-subscriber = "0.3.19"
+tracing = "0.1.41"
