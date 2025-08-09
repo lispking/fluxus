@@ -189,10 +189,10 @@ where
             keys.push(Reverse(k.clone()));
             kvs.entry(k).or_default().push(value);
 
-            if keys.len() > n {
-                if let Some(Reverse(min_k)) = keys.pop() {
-                    kvs.get_mut(&min_k).map(|v| v.pop());
-                }
+            if keys.len() > n
+                && let Some(Reverse(min_k)) = keys.pop()
+            {
+                kvs.get_mut(&min_k).map(|v| v.pop());
             }
             (keys, kvs)
         })
