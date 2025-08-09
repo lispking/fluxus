@@ -197,12 +197,12 @@ impl<T: 'static + Send + Clone> Pipeline<T> {
         let mut watermark_interval = time::interval(Duration::from_millis(100));
 
         loop {
-            if self.backpressure.should_apply_backpressure() {
-                if let Some(backoff) = self.backpressure.get_backoff() {
-                    tracing::debug!("Applying backpressure, waiting for {:?}", backoff);
-                    time::sleep(backoff).await;
-                    continue;
-                }
+            if self.backpressure.should_apply_backpressure()
+                && let Some(backoff) = self.backpressure.get_backoff()
+            {
+                tracing::debug!("Applying backpressure, waiting for {:?}", backoff);
+                time::sleep(backoff).await;
+                continue;
             }
 
             tokio::select! {
