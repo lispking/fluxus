@@ -2,10 +2,16 @@ pub mod buffered;
 pub mod console;
 pub mod dummy_sink;
 pub mod file;
+pub mod postgres_sink;
+pub mod redis_sink;
 
 pub use buffered::BufferedSink;
 pub use console::ConsoleSink;
 pub use file::FileSink;
+pub use postgres_sink::{
+    ColumnMapping, PostgresConfig, PostgresSink, PostgresSinkBuilder, PostgresType,
+};
+pub use redis_sink::{RedisOperation, RedisSink};
 
 use async_trait::async_trait;
 use fluxus_utils::models::{Record, StreamResult};

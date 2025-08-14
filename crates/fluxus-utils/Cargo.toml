@@ -22,6 +22,12 @@ async-trait = "0.1"
 tracing = "0.1"
 num_cpus = "1.16"
 csv = "1.3"
+redis = { version = "0.24", optional = true }
+tokio-postgres = { version = "0.7", optional = true }
+
+[features]
+redis = ["dep:redis"]
+postgres = ["dep:tokio-postgres"]
 
 [dev-dependencies]
 cargo-husky = { version = "1", features = ["precommit-hook", "run-cargo-test", "run-cargo-clippy", "run-cargo-fmt"] }

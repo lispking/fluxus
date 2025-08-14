@@ -1,7 +1,9 @@
 pub mod csv;
 pub mod generator;
+pub mod redis_source;
 
 pub use csv::CsvSource;
+pub use redis_source::{RedisQueueOperation, RedisSource};
 
 use fluxus_utils::models::{Record, StreamResult};
 pub use generator::GeneratorSource;

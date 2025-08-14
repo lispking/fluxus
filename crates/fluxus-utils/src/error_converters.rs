@@ -29,3 +29,19 @@ impl<T> From<csv::IntoInnerError<T>> for StreamError {
         StreamError::Serialization(err.to_string())
     }
 }
+
+/// Error converter for Redis errors
+#[cfg(feature = "redis")]
+impl From<redis::RedisError> for StreamError {
+    fn from(err: redis::RedisError) -> Self {
+        StreamError::Runtime(err.to_string())
+    }
+}
+
+/// Error converter for PostgreSQL errors
+#[cfg(feature = "postgres")]
+impl From<tokio_postgres::Error> for StreamError {
+    fn from(err: tokio_postgres::Error) -> Self {
+        StreamError::Runtime(err.to_string())
+    }
+}
