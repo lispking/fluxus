@@ -52,10 +52,10 @@ async fn main() -> Result<()> {
 
     // Test simple PostgreSQL sink (data only)
     test_postgres_simple_sink(&user_events).await?;
-
+    
     // Test PostgreSQL sink with timestamp column
     test_postgres_with_timestamp(&user_events).await?;
-
+    
     // Test structured PostgreSQL sink with column mapping
     test_postgres_structured_sink(&user_events).await?;
 
@@ -65,68 +65,62 @@ async fn main() -> Result<()> {
 
 async fn test_postgres_simple_sink(events: &[UserEvent]) -> Result<()> {
     info!("Testing PostgreSQL simple sink (data only)");
-
+    
     let mut postgres_sink = PostgresSink::simple_jsonb(
         "host=localhost user=postgres dbname=fluxus_test",
         "user_events",
-        "data",
+        "data"
     );
 
     match postgres_sink.init().await {
         Ok(_) => {
             info!("PostgreSQL simple sink initialized successfully");
-
+            
             for event in events {
                 let record = Record::new(event.clone());
                 match postgres_sink.write(record).await {
-                    Ok(_) => info!(
-                        "Written user event to PostgreSQL: {} on {}",
-                        event.event_type, event.page
-                    ),
+                    Ok(_) => info!("Written user event to PostgreSQL: {} on {}", event.event_type, event.page),
                     Err(e) => warn!("Failed to write to PostgreSQL: {}", e),
                 }
                 time::sleep(Duration::from_millis(100)).await;
             }
-
+            
             postgres_sink.close().await?;
         }
         Err(e) => warn!("Failed to connect to PostgreSQL for simple sink: {}", e),
     }
-
+    
     Ok(())
 }
 
 async fn test_postgres_with_timestamp(events: &[UserEvent]) -> Result<()> {
     info!("Testing PostgreSQL sink with timestamp column");
-
+    
     let mut postgres_sink = PostgresSink::jsonb_with_timestamp(
         "host=localhost user=postgres dbname=fluxus_test",
         "user_events",
         "data",
-        "created_at",
+        "created_at"
     );
 
     match postgres_sink.init().await {
         Ok(_) => {
             info!("PostgreSQL timestamp sink initialized successfully");
-
+            
             for event in events {
                 let record = Record::new(event.clone());
                 match postgres_sink.write(record).await {
-                    Ok(_) => info!(
-                        "Written user event with timestamp to PostgreSQL: {} on {}",
-                        event.event_type, event.page
-                    ),
+                    Ok(_) => info!("Written user event with timestamp to PostgreSQL: {} on {}", event.event_type, event.page),
                     Err(e) => warn!("Failed to write to PostgreSQL with timestamp: {}", e),
                 }
                 time::sleep(Duration::from_millis(100)).await;
             }
-
+            
             postgres_sink.close().await?;
         }
         Err(e) => warn!("Failed to connect to PostgreSQL for timestamp sink: {}", e),
     }
-
+    
     Ok(())
 }
 
@@ -142,20 +136,15 @@ async fn test_postgres_structured_sink(events: &[UserEvent]) -> Result<()> {
     info!("    browser_type TEXT,");
     info!("    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP");
     info!("  );");
-
+    
     let mut postgres_sink = PostgresSink::<UserEvent>::builder(
         "host=localhost user=postgres dbname=fluxus_test",
-        "user_analytics",
+        "user_analytics"
     )
     .map_column("user_id", "user_id", PostgresType::BigInt, true)
     .map_column("event_type", "event_type", PostgresType::Text, true)
     .map_column("page_path", "page", PostgresType::Text, false)
-    .map_column(
-        "duration_seconds",
-        "duration_ms",
-        PostgresType::Double,
-        false,
-    )
+    .map_column("duration_seconds", "duration_ms", PostgresType::Double, false)
     .map_column("browser_type", "user_agent", PostgresType::Text, false)
     .with_timestamp("created_at")
     .batch_size(10)
@@ -164,25 +153,23 @@ async fn test_postgres_structured_sink(events: &[UserEvent]) -> Result<()> {
     match postgres_sink.init().await {
         Ok(_) => {
             info!("PostgreSQL structured sink initialized successfully");
-
+            
             for event in events {
                 let record = Record::new(event.clone());
                 match postgres_sink.write(record).await {
-                    Ok(_) => info!(
-                        "Written structured user event: {} by user {}",
-                        event.event_type, event.user_id
-                    ),
+                    Ok(_) => info!("Written structured user event: {} by user {}", 
+                        event.event_type, event.user_id),
                     Err(e) => warn!("Failed to write structured data to PostgreSQL: {}", e),
                 }
                 time::sleep(Duration::from_millis(100)).await;
             }
-
+            
             // Force flush any remaining batch data
             postgres_sink.flush().await?;
             postgres_sink.close().await?;
         }
         Err(e) => warn!("Failed to connect to PostgreSQL for structured sink: {}", e),
     }
-
+    
     Ok(())
 }

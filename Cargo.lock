@@ -477,6 +477,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "data-pipeline-example"
+version = "0.2.0"
+dependencies = [
+ "anyhow",
+ "fluxus-sinks",
+ "fluxus-sources",
+ "fluxus-utils",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "digest"
 version = "0.10.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -673,6 +688,7 @@ dependencies = [
  "tempfile",
  "thiserror",
  "tokio",
+ "tokio-postgres",
  "tokio-util",
  "tracing",
 ]
@@ -1631,6 +1647,19 @@ version = "0.2.0"
 dependencies = [
  "anyhow",
  "fluxus-sinks",
+ "fluxus-utils",
+ "serde",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "postgres-source-example"
+version = "0.2.0"
+dependencies = [
+ "anyhow",
+ "fluxus-sources",
  "fluxus-utils",
  "serde",
  "tokio",

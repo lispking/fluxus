@@ -37,7 +37,7 @@ impl PostgresType {
         match self {
             PostgresType::Text => "::text",
             PostgresType::Integer => "::integer",
-            PostgresType::BigInt => "::bigint",
+            PostgresType::BigInt => "::bigint", 
             PostgresType::Double => "::double precision",
             PostgresType::Boolean => "::boolean",
             PostgresType::Timestamp => "::timestamp",
@@ -136,10 +136,7 @@ impl<T: Serialize> PostgresSink<T> {
 
             for (col_idx, mapping) in self.config.column_mappings.iter().enumerate() {
                 let param_idx = base_param_idx + col_idx + 1;
-                row_placeholders.push(format!(
-                    "${param_idx}{}",
-                    mapping.column_type.to_cast_string()
-                ));
+                row_placeholders.push(format!("${param_idx}{}", mapping.column_type.to_cast_string()));
             }
 
             // Add timestamp parameter if configured
@@ -211,10 +208,9 @@ impl<T: Serialize> PostgresSink<T> {
                             }
                         }
                     } else if mapping.required {
-                        return Err(fluxus_utils::models::StreamError::Serialization(format!(
-                            "Required field '{json_path}' not found in JSON data",
-                            json_path = mapping.json_path
-                        )));
+                        return Err(fluxus_utils::models::StreamError::Serialization(
+                            format!("Required field '{json_path}' not found in JSON data", json_path = mapping.json_path)
+                        ));
                     } else {
                         // Use NULL for optional missing fields
                         params.push(Box::new(Option::<String>::None));
@@ -232,10 +228,7 @@ impl<T: Serialize> PostgresSink<T> {
             }
 
             // Convert to references for the query
-            let param_refs: Vec<&(dyn ToSql + Sync)> = params
-                .iter()
-                .map(|p| p.as_ref() as &(dyn ToSql + Sync))
-                .collect();
+            let param_refs: Vec<&(dyn ToSql + Sync)> = params.iter().map(|p| p.as_ref() as &(dyn ToSql + Sync)).collect();
 
             client
                 .execute(&query, &param_refs)

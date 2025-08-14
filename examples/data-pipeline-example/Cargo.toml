@@ -1,0 +1,15 @@
+[package]
+name = "data-pipeline-example"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+fluxus-sources = { path = "../../crates/fluxus-sources" }
+fluxus-sinks = { path = "../../crates/fluxus-sinks" }
+fluxus-utils = { path = "../../crates/fluxus-utils" }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
